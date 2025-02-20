@@ -33,7 +33,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             false,
             "openTrove(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)",
             new address[](4),
-            string.concat("Open trove: extract owner, addManager, removeManager, receiver: ", getAddress(sourceChain, "FELIX_OWNER"), ", ", getAddress(sourceChain, "FELIX_ADDMANAGER"), ", ", getAddress(sourceChain, "FELIX_REMOVEMANAGER"), ", ", getAddress(sourceChain, "FELIX_RECEIVER")),
+            "openTrove",
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
 
@@ -168,7 +168,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "Hyperliquid: vault transfer",
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
-        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "HYPERLIQUID_VAULT");
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
 
         // sendTokenDelegate leaf
         unchecked {
@@ -182,7 +182,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "Hyperliquid: token delegate",
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
-        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "HYPERLIQUID_VALIDATOR");
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
 
         // sendSpot leaf
         unchecked {
@@ -196,7 +196,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "Hyperliquid: spot send",
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
-        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "HYPERLIQUID_DESTINATION");
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
 
         // sendIocOrder leaf
         unchecked {
