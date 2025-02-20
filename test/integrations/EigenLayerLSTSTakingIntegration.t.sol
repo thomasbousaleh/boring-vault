@@ -110,61 +110,50 @@ contract EigenLayerLSTStakingIntegrationTest is Test, MerkleTreeHelper {
     }
 
     function testEigenLayerLSTStakingIntegration() external {
-        // Fund the BoringVault with 1,000 METH tokens.
         deal(getAddress(sourceChain, "METH"), address(boringVault), 1_000e18);
 
-        // ----- Setup: Prepare ManageLeafs for operations -----
-        // Create an array of 8 ManageLeaf structs for various operations (approve, deposit, withdrawal queue, etc.).
+        // approve
+        // Call deposit
+        // withdraw
+        // complete withdraw
         ManageLeaf[] memory leafs = new ManageLeaf[](8);
         _addLeafsForEigenLayerLST(
             leafs,
-            getAddress(sourceChain, "METH"),              // Token address (METH)
-            getAddress(sourceChain, "mETHStrategy"),        // Strategy address for deposits
-            getAddress(sourceChain, "strategyManager"),     // Manager for handling strategy deposits
-            getAddress(sourceChain, "delegationManager"),   // Manager for handling withdrawals
-            address(0),                                     // No delegation operator in this context
-            getAddress(sourceChain, "eigenRewards"),        // EigenLayer rewards contract address
-            address(0)                                      // No extra address parameter
+            getAddress(sourceChain, "METH"),
+            getAddress(sourceChain, "mETHStrategy"),
+            getAddress(sourceChain, "strategyManager"),
+            getAddress(sourceChain, "delegationManager"),
+            address(0),
+            getAddress(sourceChain, "eigenRewards"),
+            address(0)
         );
 
-        // Generate a Merkle Tree from the prepared ManageLeafs
         bytes32[][] memory manageTree = _generateMerkleTree(leafs);
 
-        // Set the Merkle root in the manager contract for later verification
         manager.setManageRoot(address(this), manageTree[manageTree.length - 1][0]);
 
-        // ----- Part 1: Execute initial operations (approve, deposit, and queue withdrawal) -----
-        // Select the first three operations from the leafs array
         ManageLeaf[] memory manageLeafs = new ManageLeaf[](3);
         manageLeafs[0] = leafs[0];
         manageLeafs[1] = leafs[1];
         manageLeafs[2] = leafs[2];
 
-        // Generate Merkle proofs for the selected operations
         bytes32[][] memory manageProofs = _getProofsUsingTree(manageLeafs, manageTree);
 
-        // Define target contracts for the operations:
-        // [0] METH token (for approving spending), [1] strategyManager (for depositing),
-        // [2] delegationManager (for queuing the withdrawal request)
         address[] memory targets = new address[](3);
         targets[0] = getAddress(sourceChain, "METH");
         targets[1] = getAddress(sourceChain, "strategyManager");
         targets[2] = getAddress(sourceChain, "delegationManager");
 
-        // Prepare encoded function calls for each target
         bytes[] memory targetData = new bytes[](3);
-        // Approve the strategyManager to spend METH tokens on behalf of the caller
         targetData[0] = abi.encodeWithSignature(
             "approve(address,uint256)", getAddress(sourceChain, "strategyManager"), type(uint256).max
         );
-        // Deposit 1,000 METH tokens into the mETHStrategy via the strategyManager
         targetData[1] = abi.encodeWithSignature(
             "depositIntoStrategy(address,address,uint256)",
             getAddress(sourceChain, "mETHStrategy"),
             getAddress(sourceChain, "METH"),
             1_000e18
         );
-        // Queue a withdrawal request: setup withdrawal parameters for later completion
         DecoderCustomTypes.QueuedWithdrawalParams[] memory queuedParams =
             new DecoderCustomTypes.QueuedWithdrawalParams[](1);
         queuedParams[0].strategies = new address[](1);
@@ -174,40 +163,30 @@ contract EigenLayerLSTStakingIntegrationTest is Test, MerkleTreeHelper {
         queuedParams[0].withdrawer = address(boringVault);
         targetData[2] = abi.encodeWithSignature("queueWithdrawals((address[],uint256[],address)[])", queuedParams);
 
-        // Set up decoder/sanitizer contracts for each operation
         address[] memory decodersAndSanitizers = new address[](3);
         decodersAndSanitizers[0] = rawDataDecoderAndSanitizer;
         decodersAndSanitizers[1] = rawDataDecoderAndSanitizer;
         decodersAndSanitizers[2] = rawDataDecoderAndSanitizer;
 
-        // No ETH value is sent with these calls
         uint256[] memory values = new uint256[](3);
 
-        // Execute the batch of operations with Merkle verification
         manager.manageVaultWithMerkleVerification(manageProofs, decodersAndSanitizers, targets, targetData, values);
 
-        // ----- Part 2: Finalize withdrawal after required delay -----
-        // Record the block number at which the withdrawal was requested
+        // Finalize withdraw requests.
+        // Must wait atleast delegationManager.minWithdrawalDelayBlocks() blocks which is 50400.
         uint32 withdrawRequestBlock = uint32(block.number);
-        // Advance the blockchain by 50400 blocks to simulate the mandatory waiting period
         vm.roll(block.number + 50400);
 
-        // ----- Part 3: Complete the queued withdrawal -----
-        // Select the ManageLeaf corresponding to the withdrawal completion operation (leafs[3])
+        // Complete the withdrawal
         manageLeafs = new ManageLeaf[](1);
         manageLeafs[0] = leafs[3];
 
-        // Generate the Merkle proof for the withdrawal completion operation
         manageProofs = _getProofsUsingTree(manageLeafs, manageTree);
 
-        // Define the target contract for completing the withdrawal (delegationManager)
         targets = new address[](1);
         targets[0] = getAddress(sourceChain, "delegationManager");
 
-        // Prepare encoded call data to complete the queued withdrawal
         targetData = new bytes[](1);
-        // Set up withdrawal parameters: staker is the BoringVault, no delegation, nonce is 0
-        // Use mETHStrategy and specify the shares to withdraw
         DecoderCustomTypes.Withdrawal[] memory withdrawParams = new DecoderCustomTypes.Withdrawal[](1);
         withdrawParams[0].staker = address(boringVault);
         withdrawParams[0].delegatedTo = address(0);
@@ -218,17 +197,13 @@ contract EigenLayerLSTStakingIntegrationTest is Test, MerkleTreeHelper {
         withdrawParams[0].strategies[0] = getAddress(sourceChain, "mETHStrategy");
         withdrawParams[0].shares = new uint256[](1);
         withdrawParams[0].shares[0] = 1_000e18;
-        // Define the tokens involved in the withdrawal; in this case, the METH token
         address[][] memory tokens = new address[][](1);
         tokens[0] = new address[](1);
         tokens[0][0] = getAddress(sourceChain, "METH");
-        // Setup middleware parameters (here, an index of 0)
         uint256[] memory middlewareTimesIndexes = new uint256[](1);
         middlewareTimesIndexes[0] = 0;
-        // Indicate that the withdrawal should result in tokens being received
         bool[] memory receiveAsTokens = new bool[](1);
         receiveAsTokens[0] = true;
-        // Encode the completeQueuedWithdrawals function call with all parameters
         targetData[0] = abi.encodeWithSignature(
             "completeQueuedWithdrawals((address,address,address,uint256,uint32,address[],uint256[])[],address[][],uint256[],bool[])",
             withdrawParams,
@@ -237,17 +212,13 @@ contract EigenLayerLSTStakingIntegrationTest is Test, MerkleTreeHelper {
             receiveAsTokens
         );
 
-        // Set up the decoder for the withdrawal completion operation
         decodersAndSanitizers = new address[](1);
         decodersAndSanitizers[0] = rawDataDecoderAndSanitizer;
 
-        // No ETH value is attached to this call
         values = new uint256[](1);
 
-        // Execute the complete withdrawal operation with Merkle verification
         manager.manageVaultWithMerkleVerification(manageProofs, decodersAndSanitizers, targets, targetData, values);
 
-        // ----- Final Assertion: Confirm that the BoringVault received 1,000 METH tokens -----
         assertEq(
             getERC20(sourceChain, "METH").balanceOf(address(boringVault)),
             1_000e18,
