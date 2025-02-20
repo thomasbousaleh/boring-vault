@@ -112,14 +112,16 @@ contract ChainValues {
         values[hyperliquid]["deployerAddress"] = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d.toBytes32();
         values[hyperliquid]["dev0Address"] = 0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b.toBytes32();
         values[hyperliquid]["dev1Address"] = 0xf8553c8552f906C19286F21711721E206EE4909E.toBytes32();
-        values[hyperliquid]["txBundlerAddress"] = 0x47Cec90FACc9364D7C21A8ab5e2aD9F1f75D740C.toBytes32();
-        values[hyperliquid]["hypeBTCVault"] = 0x657e8C867D8B37dCC18fA4Caead9C45EB088C642.toBytes32();
-        values[hyperliquid]["hypeBTCDelayedWithdraw"] = 0x75E3f26Ceff44258CE8cB451D7d2cC8966Ef3554.toBytes32();
-        values[hyperliquid]["hypeBTCOnChainQueue"] = 0x74EC75fb641ec17B04007733d9efBE2D1dA5CA2C.toBytes32();
-        values[hyperliquid]["hypeBTCTeller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
+        values[hyperliquid]["txBundlerAddress"] = 0x47Cec90FACc9364D7C21A8ab5e2aD9F1f75D740C.toBytes32(); 
+        values[hyperliquid]["delayedWithdraw"] = 0x75E3f26Ceff44258CE8cB451D7d2cC8966Ef3554.toBytes32();
+        values[hyperliquid]["onChainQueue"] = 0x74EC75fb641ec17B04007733d9efBE2D1dA5CA2C.toBytes32();
+        values[hyperliquid]["teller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
 
         // Tellers
         values[hyperliquid]["hypeBTCTeller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
+
+        values[hyperliquid]["balancerVault"] = address(1).toBytes32();
+        values[hyperliquid]["vault"] = address(1).toBytes32();
 
         // DeFi Ecosystem
         values[hyperliquid]["HYPE"] = 0x7317BEb7CCeEd72EF0B346074cC8E7ab00000000.toBytes32();
@@ -136,7 +138,7 @@ contract ChainValues {
 
         // Felix
         values[hyperliquid]["collateralRegistry"] = 0xb582166C6243BaC8b2Dc0ad530275B1D54Aa4140.toBytes32();
-        values[hyperliquid]["feUSDToken"] = 0x9BF3f4267Acb12cd4A8286064e8f66A9336132Bc.toBytes32();
+        values[hyperliquid]["feUSD"] = 0x9BF3f4267Acb12cd4A8286064e8f66A9336132Bc.toBytes32();
         values[hyperliquid]["hintHelpers"] = 0x9E11f580768b0bB619D7b336f58359c573082d41.toBytes32();
         values[hyperliquid]["multiTroveGetter"] = 0xEA0BFCc6641F51Cb18c36B0ACCD29F5283A4d9DB.toBytes32();
 
@@ -175,9 +177,9 @@ contract ChainValues {
         values[hyperliquid]["FUNDS_SAFE"] = 0xF06016D822943C42e3Cb7FC3a6A3B1889C1045f8.toBytes32();
 
         values[hyperliquid]["governance"] = 0x636dEb767Cd7D0f15ca4aB8eA9a9b26E98B426AC.toBytes32();
-        values[hyperliquid]["curveUsdcFelixPool"] = 0xaDb6851875B7496E3D565B754d8a79508480a203.toBytes32();
-        values[hyperliquid]["curveUsdcFelixGauge"] = 0xA8bB51606dB8e81F0ac964f0855C20D9e474Ab63.toBytes32();
-        values[hyperliquid]["curveUsdcFelixInitiative"] = 0xa76434D58cCC9b8277180a691148A598Fd073035.toBytes32();
+        values[hyperliquid]["curveUsdcFeUSDPool"] = 0xaDb6851875B7496E3D565B754d8a79508480a203.toBytes32();
+        values[hyperliquid]["curveUsdcFeUSDGauge"] = 0xA8bB51606dB8e81F0ac964f0855C20D9e474Ab63.toBytes32();
+        values[hyperliquid]["curveUsdcFeUSDInitiative"] = 0xa76434D58cCC9b8277180a691148A598Fd073035.toBytes32();
         values[hyperliquid]["curvefeUSDFelixPool"] = 0x29A760138FA530d51a100171cB5CE4DDf506aF2E.toBytes32();
         values[hyperliquid]["curvefeUSDFelixGauge"] = 0x3Ac4b6da715E7963BBcfb31dE39A1B139F426223.toBytes32();
         values[hyperliquid]["curvefeUSDFelixInitiative"] = 0x4347d2D28A3428dDF1B7cfC7f097b2128a1A0059.toBytes32();
