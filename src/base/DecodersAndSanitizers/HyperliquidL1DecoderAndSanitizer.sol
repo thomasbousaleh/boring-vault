@@ -3,9 +3,20 @@ pragma solidity ^0.8.21;
 
 import {BaseDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/BaseDecoderAndSanitizer.sol";
 
+enum HyperliquidOperation {
+    DepositUSDC,
+    SendVaultTransfer,
+    SendTokenDelegate,
+    SendSpot,
+    SendIocOrder,
+    SendCDeposit,
+    SendCWithdrawal,
+    SendUsdClassTransfer
+}
+
 contract HyperliquidL1DecoderAndSanitizer is BaseDecoderAndSanitizer {
     // For sendVaultTransfer: extract the vault address
-    function sendVaultTransfer(address vault, bool /*isDeposit*/, uint64 /*usd*/)
+    function sendVaultTransfer(address vault, bool, uint64)  // isDeposit, usd
         external
         pure
         returns (bytes memory addressesFound)
@@ -14,7 +25,7 @@ contract HyperliquidL1DecoderAndSanitizer is BaseDecoderAndSanitizer {
     }
 
     // For sendTokenDelegate: extract the validator address
-    function sendTokenDelegate(address validator, uint64 /*_wei*/, bool /*isUndelegate*/)
+    function sendTokenDelegate(address validator, uint64, bool)  // _wei, isUndelegate
         external
         pure
         returns (bytes memory addressesFound)
@@ -23,7 +34,7 @@ contract HyperliquidL1DecoderAndSanitizer is BaseDecoderAndSanitizer {
     }
 
     // For sendSpot: extract the destination address
-    function sendSpot(address destination, uint64 /*token*/, uint64 /*_wei*/)
+    function sendSpot(address destination, uint64, uint64)  // token, _wei
         external
         pure
         returns (bytes memory addressesFound)
@@ -32,7 +43,7 @@ contract HyperliquidL1DecoderAndSanitizer is BaseDecoderAndSanitizer {
     }
 
     // For sendIocOrder: no address parameters, so return empty bytes
-    function sendIocOrder(uint16 /*perp*/, bool /*isBuy*/, uint64 /*limitPx*/, uint64 /*sz*/)
+    function sendIocOrder(uint16, bool, uint64, uint64)  // perp, isBuy, limitPx, sz
         external
         pure
         returns (bytes memory addressesFound)
@@ -41,7 +52,7 @@ contract HyperliquidL1DecoderAndSanitizer is BaseDecoderAndSanitizer {
     }
 
     // For sendCDeposit: no address parameters, so return empty bytes
-    function sendCDeposit(uint64 /*_wei*/)
+    function sendCDeposit(uint64)  // _wei
         external
         pure
         returns (bytes memory addressesFound)
@@ -50,7 +61,7 @@ contract HyperliquidL1DecoderAndSanitizer is BaseDecoderAndSanitizer {
     }
 
     // For sendCWithdrawal: no address parameters, so return empty bytes
-    function sendCWithdrawal(uint64 /*_wei*/)
+    function sendCWithdrawal(uint64)  // _wei
         external
         pure
         returns (bytes memory addressesFound)
@@ -59,7 +70,7 @@ contract HyperliquidL1DecoderAndSanitizer is BaseDecoderAndSanitizer {
     }
 
     // For sendUsdClassTransfer: no address parameters, so return empty bytes
-    function sendUsdClassTransfer(uint64 /*ntl*/, bool /*toPerp*/)
+    function sendUsdClassTransfer(uint64, bool)  // ntl, toPerp
         external
         pure
         returns (bytes memory addressesFound)
