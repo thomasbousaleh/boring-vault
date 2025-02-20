@@ -21,6 +21,236 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
     mapping(address => mapping(address => mapping(address => bool))) public ownerToTokenToSpenderToApprovalInTree;
     mapping(address => mapping(address => mapping(address => bool))) public ownerToOneInchSellTokenToBuyTokenToInTree;
 
+    // --- Felix and Hyperliquid ---
+
+    function _addFelixLeafs(ManageLeaf[] memory leafs) internal {
+        // openTrove leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "openTrove(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)",
+            new address[](4),
+            string.concat("Open trove: extract owner, addManager, removeManager, receiver: ", getAddress(sourceChain, "FELIX_OWNER"), ", ", getAddress(sourceChain, "FELIX_ADDMANAGER"), ", ", getAddress(sourceChain, "FELIX_REMOVEMANAGER"), ", ", getAddress(sourceChain, "FELIX_RECEIVER")),
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // addColl leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "addColl(uint256,uint256)",
+            new address[](0),
+            "Call addColl",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // withdrawColl leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "withdrawColl(uint256,uint256)",
+            new address[](0),
+            "Call withdrawColl",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // withdrawBold leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "withdrawBold(uint256,uint256,uint256)",
+            new address[](0),
+            "Call withdrawBold",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // repayBold leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "repayBold(uint256,uint256)",
+            new address[](0),
+            "Call repayBold",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // closeTrove leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "closeTrove(uint256)",
+            new address[](0),
+            "Call closeTrove",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // adjustTrove leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "adjustTrove(uint256,uint256,bool,uint256,bool,uint256)",
+            new address[](0),
+            "Call adjustTrove",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // applyPendingDebt leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "applyPendingDebt(uint256,uint256,uint256)",
+            new address[](0),
+            "Call applyPendingDebt",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // claimCollateral leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "claimCollateral()",
+            new address[](0),
+            "Call claimCollateral",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // shutdown leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC_borrowerOperations"),
+            false,
+            "shutdown()",
+            new address[](0),
+            "Call shutdown",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+    }
+
+    function _addHyperliquidLeafs(ManageLeaf[] memory leafs) internal {
+        // sendVaultTransfer leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "hlp"),
+            false,
+            "sendVaultTransfer(address,bool,uint64)",
+            new address[](1),
+            "Hyperliquid: vault transfer",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "HYPERLIQUID_VAULT");
+
+        // sendTokenDelegate leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "hlp"),
+            false,
+            "sendTokenDelegate(address,uint64,bool)",
+            new address[](1),
+            "Hyperliquid: token delegate",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "HYPERLIQUID_VALIDATOR");
+
+        // sendSpot leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "hlp"),
+            false,
+            "sendSpot(address,uint64,uint64)",
+            new address[](1),
+            "Hyperliquid: spot send",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "HYPERLIQUID_DESTINATION");
+
+        // sendIocOrder leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "hlp"),
+            false,
+            "sendIocOrder(uint16,bool,uint64,uint64)",
+            new address[](0),
+            "Hyperliquid: IOC order",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // sendCDeposit leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "hlp"),
+            false,
+            "sendCDeposit(uint64)",
+            new address[](0),
+            "Hyperliquid: CDeposit",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // sendCWithdrawal leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "hlp"),
+            false,
+            "sendCWithdrawal(uint64)",
+            new address[](0),
+            "Hyperliquid: CWithdrawal",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        // sendUsdClassTransfer leaf
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "hlp"),
+            false,
+            "sendUsdClassTransfer(uint64,bool)",
+            new address[](0),
+            "Hyperliquid: USD Class Transfer",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+    }
+
     function setSourceChainName(string memory _chain) internal {
         sourceChain = _chain;
     }

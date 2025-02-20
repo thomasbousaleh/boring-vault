@@ -27,7 +27,7 @@ contract ChainValues {
     string public constant sepolia = "sepolia";
     string public constant sonicTestnet = "sonicTestnet";
     string public constant sonicBlaze = "sonicBlaze";
-
+    string public constant hyperliquid = "hyperliquid";
     // Bridging constants.
     uint64 public constant ccipArbitrumChainSelector = 4949039107694359620;
     uint64 public constant ccipMainnetChainSelector = 5009297550715157269;
@@ -98,11 +98,124 @@ contract ChainValues {
         _addCornValues();
         _addSwellValues();
         _addSonicMainnetValues();
+        _addHyperliquidValues();
         // Add testnet values
         _addHoleskyValues();
         _addSepoliaValues();
         _addSonicTestnetValues();
         _addSonicBlazeValues();
+    }
+
+    function _addHyperliquidValues() private {
+        values[hyperliquid]["boringDeployerContract"] = 0xFD65ADF7d2f9ea09287543520a703522E0a360C9.toBytes32();
+        // Liquid Ecosystem
+        values[hyperliquid]["deployerAddress"] = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d.toBytes32();
+        values[hyperliquid]["dev0Address"] = 0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b.toBytes32();
+        values[hyperliquid]["dev1Address"] = 0xf8553c8552f906C19286F21711721E206EE4909E.toBytes32();
+        values[hyperliquid]["liquidV1PriceRouter"] = 0x693799805B502264f9365440B93C113D86a4fFF5.toBytes32();
+        values[hyperliquid]["liquidPayoutAddress"] = 0xA9962a5BfBea6918E958DeE0647E99fD7863b95A.toBytes32();
+        values[hyperliquid]["liquidMultisig"] = 0xCEA8039076E35a825854c5C2f85659430b06ec96.toBytes32();
+        values[hyperliquid]["liquidEth"] = 0xf0bb20865277aBd641a307eCe5Ee04E79073416C.toBytes32();
+        values[hyperliquid]["liquidEthStrategist"] = 0x41DFc53B13932a2690C9790527C1967d8579a6ae.toBytes32();
+        values[hyperliquid]["liquidEthManager"] = 0x227975088C28DBBb4b421c6d96781a53578f19a8.toBytes32();
+        values[hyperliquid]["liquidEthDelayedWithdraw"] = 0xA1177Bc62E42eF2f9225a6cBF1CfE5CbC360C33A.toBytes32();
+        values[hyperliquid]["superSymbiotic"] = 0x917ceE801a67f933F2e6b33fC0cD1ED2d5909D88.toBytes32();
+        values[hyperliquid]["superSymbioticTeller"] = 0x99dE9e5a3eC2750a6983C8732E6e795A35e7B861.toBytes32();
+        values[hyperliquid]["weETHs"] = 0x917ceE801a67f933F2e6b33fC0cD1ED2d5909D88.toBytes32();
+        values[hyperliquid]["txBundlerAddress"] = 0x47Cec90FACc9364D7C21A8ab5e2aD9F1f75D740C.toBytes32();
+        values[hyperliquid]["eBTCVault"] = 0x657e8C867D8B37dCC18fA4Caead9C45EB088C642.toBytes32();
+        values[hyperliquid]["eBTCDelayedWithdraw"] = 0x75E3f26Ceff44258CE8cB451D7d2cC8966Ef3554.toBytes32();
+        values[hyperliquid]["eBTCOnChainQueue"] = 0x74EC75fb641ec17B04007733d9efBE2D1dA5CA2C.toBytes32();
+        values[hyperliquid]["eBTCTeller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
+
+        // Tellers
+        values[hyperliquid]["eBTCTeller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
+
+        // DeFi Ecosystem
+        values[hyperliquid]["ETH"] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.toBytes32();
+        values[hyperliquid]["uniV3Router"] = 0xE592427A0AEce92De3Edee1F18E0157C05861564.toBytes32();
+        values[hyperliquid]["uniV2Router"] = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D.toBytes32();
+        values[hyperliquid]["hlp"] = 0x07951756b68427e7554AB4c9091344cB8De1Ad5a.toBytes32();
+
+        // ERC20s
+        values[hyperliquid]["USDC"] = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48.toBytes32();
+        values[hyperliquid]["WETH"] = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.toBytes32();
+        values[hyperliquid]["WBTC"] = 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599.toBytes32();
+        values[hyperliquid]["USDT"] = 0xdAC17F958D2ee523a2206206994597C13D831ec7.toBytes32();
+        values[hyperliquid]["TUSD"] = 0x0000000000085d4780B73119b644AE5ecd22b376.toBytes32();
+        values[hyperliquid]["DAI"] = 0x6B175474E89094C44Da98b954EedeAC495271d0F.toBytes32();
+        values[hyperliquid]["WSTETH"] = 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0.toBytes32();
+        values[hyperliquid]["HYPE"] = 0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84.toBytes32();
+        values[hyperliquid]["WHYPE"] = 0x853d955aCEf822Db058eb8505911ED77F175b99e.toBytes32();
+        values[hyperliquid]["WSTHYPE"] = 0x41DFc53B13932a2690C9790527C1967d8579a6ae.toBytes32();
+
+        // Datafeeds
+        values[hyperliquid]["WETH_USD_FEED"] = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419.toBytes32();
+        values[hyperliquid]["USDC_USD_FEED"] = 0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6.toBytes32();
+        values[hyperliquid]["WBTC_USD_FEED"] = 0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c.toBytes32();
+        values[hyperliquid]["TUSD_USD_FEED"] = 0xec746eCF986E2927Abd291a2A1716c940100f8Ba.toBytes32();
+        values[hyperliquid]["STETH_USD_FEED"] = 0xCfE54B5cD566aB89272946F602D76Ea879CAb4a8.toBytes32();
+        values[hyperliquid]["DAI_USD_FEED"] = 0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9.toBytes32();
+        values[hyperliquid]["USDT_USD_FEED"] = 0x3E7d1eAB13ad0104d2750B8863b489D65364e32D.toBytes32();
+        values[hyperliquid]["FEUSD_USD_FEED"] = 0xdbd020CAeF83eFd542f4De03e3cF0C28A4428bd5.toBytes32();
+        values[hyperliquid]["HYPE_USD_FEED"] = 0xB9E1E3A9feFf48998E45Fa90847ed4D467E8BcfD.toBytes32();
+        values[hyperliquid]["WHYPE_USD_FEED"] = 0x536218f9E9Eb48863970252233c8F271f554C2d0.toBytes32();
+
+        // Felix
+        values[hyperliquid]["collateralRegistry"] = 0xd99de73b95236f69a559117ecd6f519af780f3f7.toBytes32();
+        values[hyperliquid]["boldToken"] = 0xb01dd87b29d187f3e3a4bf6cdaebfb97f3d9ab98.toBytes32();
+        values[hyperliquid]["hintHelpers"] = 0xe3bb97ee79ac4bdfc0c30a95ad82c243c9913ada.toBytes32();
+        values[hyperliquid]["multiTroveGetter"] = 0x51f54b400d3114ff8abe8c44fc78e27e42571710.toBytes32();
+        values[hyperliquid]["exchangeHelpers"] = 0x28c9decfacee0e796409b4b63eb263610e5e38dc.toBytes32();
+
+        values[hyperliquid]["WBTC_addressesRegistry"] = 0x38e1f07b954cfab7239d7acab49997fbaad96476.toBytes32();
+        values[hyperliquid]["WBTC_activePool"] = 0xacece9a6ff7fea9b9e1cdfeee61ca2b45cc4627b.toBytes32();
+        values[hyperliquid]["WBTC_borrowerOperations"] = 0x0b995602b5a797823f92027e8b40c0f2d97aff1c.toBytes32();
+        values[hyperliquid]["WBTC_collSurplusPool"] = 0x46720b3d63e38583d8f6d77d52c52df32604ef4b.toBytes32();
+        values[hyperliquid]["WBTC_defaultPool"] = 0x075e0c707097c4c071056687b0b87cd9392c7bbd.toBytes32();
+        values[hyperliquid]["WBTC_sortedTroves"] = 0x879474cfbb980fb6899aaaa9b5d5ee14ffbf85a9.toBytes32();
+        values[hyperliquid]["WBTC_stabilityPool"] = 0xf69eb8c0d95d4094c16686769460f678727393cf.toBytes32();
+        values[hyperliquid]["WBTC_troveManager"] = 0x81d78814df42da2cab0e8870c477bc3ed861de66.toBytes32();
+        values[hyperliquid]["WBTC_troveNFT"] = 0x84ed456a8074652130dfc4fe1fadb140e0f8ce2b.toBytes32();
+        values[hyperliquid]["WBTC_metadataNFT"] = 0x05e6a5aa1c0dfefe83a8df37f1a9fa0c17c5f375.toBytes32();
+        values[hyperliquid]["WBTC_priceFeed"] = 0x3279e2b49ff60dafb276fbaff847383b67a7ec2d.toBytes32();
+        values[hyperliquid]["WBTC_gasPool"] = 0xaafd627156a28153e4066cd3a062bbf9e8707c5c.toBytes32();
+        values[hyperliquid]["WBTC_interestRouter"] = 0x636deb767cd7d0f15ca4ab8ea9a9b26e98b426ac.toBytes32();
+        values[hyperliquid]["WBTC_wbtcZapper"] = 0xd929c1927988625f834b9a39b562018cf6daeda5.toBytes32();
+        values[hyperliquid]["WBTC_leverageZapper"] = 0x978d7188ae01881d254ad7e94874653b0c268004.toBytes32();
+
+        values[hyperliquid]["wstHYPE_addressesRegistry"] = 0x2d4ef56cb626e9a4c90c156018ba9ce269573c61.toBytes32();
+        values[hyperliquid]["wstHYPE_activePool"] = 0x2fcf4e86594aadd744f82fd80d5da9b72ab50d7c.toBytes32();
+        values[hyperliquid]["wstHYPE_borrowerOperations"] = 0x94c1610a7373919bd9cfb09ded19894601f4a1be.toBytes32();
+        values[hyperliquid]["wstHYPE_collSurplusPool"] = 0xc8e5bda2efc25f04d5feb56eee80e3d8af74cb7f.toBytes32();
+        values[hyperliquid]["wstHYPE_defaultPool"] = 0x4fd6b1d48900e41710db9f219e153bb56727192b.toBytes32();
+        values[hyperliquid]["wstHYPE_sortedTroves"] = 0x15dda27e28f49c392067f285157b82c1a4539978.toBytes32();
+        values[hyperliquid]["wstHYPE_stabilityPool"] = 0xcf46dab575c364a8b91bda147720ff4361f4627f.toBytes32();
+        values[hyperliquid]["wstHYPE_troveManager"] = 0xb47ef60132deabc89580fd40e49c062d93070046.toBytes32();
+        values[hyperliquid]["wstHYPE_troveNFT"] = 0xf7cf4efcdaacab0c3f21931501133501fff51781.toBytes32();
+        values[hyperliquid]["wstHYPE_metadataNFT"] = 0xa33980796254f1daaff5423a1951d8060da93a14.toBytes32();
+        values[hyperliquid]["wstHYPE_priceFeed"] = 0x4c275608887ad2eb049d9006e6852bc3ee8a00fa.toBytes32();
+        values[hyperliquid]["wstHYPE_gasPool"] = 0x38e721262a77637e673d756f2faf44a8363e8aea.toBytes32();
+        values[hyperliquid]["wstHYPE_interestRouter"] = 0x636deb767cd7d0f15ca4ab8ea9a9b26e98b426ac.toBytes32();
+        values[hyperliquid]["wstHYPE_gasCompZapper"] = 0x3c45fc2b161d1c7f486d30442fe59975fe98c715.toBytes32();
+        values[hyperliquid]["wstHYPE_leverageZapper"] = 0xc3d864adc2a9b49d52e640b697241408d896179f.toBytes32();
+
+        values[hyperliquid]["FUNDS_SAFE"] = 0xf06016d822943c42e3cb7fc3a6a3b1889c1045f8.toBytes32();
+
+        values[hyperliquid]["governance"] = 0x636deb767cd7d0f15ca4ab8ea9a9b26e98b426ac.toBytes32();
+        values[hyperliquid]["curveUsdcBoldPool"] = 0xadb6851875b7496e3d565b754d8a79508480a203.toBytes32();
+        values[hyperliquid]["curveUsdcBoldGauge"] = 0xa8bb51606db8e81f0ac964f0855c20d9e474ab63.toBytes32();
+        values[hyperliquid]["curveUsdcBoldInitiative"] = 0xa76434d58ccc9b8277180a691148a598fd073035.toBytes32();
+        values[hyperliquid]["curveLusdBoldPool"] = 0x29a760138fa530d51a100171cb5ce4ddf506af2e.toBytes32();
+        values[hyperliquid]["curveLusdBoldGauge"] = 0x3ac4b6da715e7963bbcfb31de39a1b139f426223.toBytes32();
+        values[hyperliquid]["curveLusdBoldInitiative"] = 0x4347d2d28a3428ddf1b7cfc7f097b2128a1a0059.toBytes32();
+        values[hyperliquid]["defiCollectiveInitiative"] = 0xdc6f869d2d34e4aee3e89a51f2af6d54f0f7f690.toBytes32();
+        values[hyperliquid]["stakingV1"] = 0x4f9fbb3f1e99b56e0fe2892e623ed36a76fc605d.toBytes32();
+        values[hyperliquid]["FELIXToken"] = 0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d.toBytes32();
+        values[hyperliquid]["FESDToken"] = 0x5f98805a4e8be255a32880fdec7f6728c6568ba0.toBytes32();
+        
+        // Hyperliquid
+        values[hyperliquid]["hlp"] = 0x636deb767cd7d0f15ca4ab8ea9a9b26e98b426ac.toBytes32();
     }
 
     function _addMainnetValues() private {
