@@ -29,6 +29,15 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
+            getAddress(sourceChain, "WBTC"),
+            false,
+            "approve(address,uint256)",
+            new address[](1),
+            string.concat("Approve Strategy Manager to spend"),
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        leafs[leafIndex] = ManageLeaf(
             getAddress(sourceChain, "WBTC_borrowerOperations"),
             false,
             "openTrove(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)",
