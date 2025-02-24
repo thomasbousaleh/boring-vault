@@ -108,7 +108,6 @@ contract ChainValues {
 
     function _addHyperliquidValues() private {
         values[hyperliquid]["boringDeployerContract"] = 0xFD65ADF7d2f9ea09287543520a703522E0a360C9.toBytes32();
-        // Liquid Ecosystem
         values[hyperliquid]["deployerAddress"] = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d.toBytes32();
         values[hyperliquid]["dev0Address"] = 0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b.toBytes32();
         values[hyperliquid]["dev1Address"] = 0xf8553c8552f906C19286F21711721E206EE4909E.toBytes32();
@@ -116,6 +115,7 @@ contract ChainValues {
         values[hyperliquid]["delayedWithdraw"] = 0x75E3f26Ceff44258CE8cB451D7d2cC8966Ef3554.toBytes32();
         values[hyperliquid]["onChainQueue"] = 0x74EC75fb641ec17B04007733d9efBE2D1dA5CA2C.toBytes32();
         values[hyperliquid]["teller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
+        values[hyperliquid]["strategyManager"] = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d.toBytes32();
 
         // Tellers
         values[hyperliquid]["hypeBTCTeller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
@@ -131,7 +131,7 @@ contract ChainValues {
         // ERC20s
         values[hyperliquid]["USDC"] = 0xeB62eee3685fc4C43992febcD9e7544300000000.toBytes32();
         values[hyperliquid]["WETH"] = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.toBytes32();
-        values[hyperliquid]["WBTC"] = 0x286820Da26c94f1E0Ff1E436238F238400000000.toBytes32();
+        values[hyperliquid]["WBTC"] = 0x6b673c644e1E7A8F2bee78c56d702Ab486644231.toBytes32();
 
         // Datafeeds
         values[hyperliquid]["HYPE_USD_FEED"] = 0xC3346631E0A9720582fB9CAbdBEA22BC2F57741b.toBytes32();

@@ -36,7 +36,11 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             string.concat("Approve Strategy Manager to spend"),
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
-
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "strategyManager");
+        
+        unchecked {
+            leafIndex++;
+        }
         leafs[leafIndex] = ManageLeaf(
             getAddress(sourceChain, "WBTC_borrowerOperations"),
             false,
@@ -45,6 +49,10 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "openTrove",
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "WBTC_borrowerOperations");
+        leafs[leafIndex].argumentAddresses[1] = getAddress(sourceChain, "WBTC_borrowerOperations");
+        leafs[leafIndex].argumentAddresses[2] = getAddress(sourceChain, "WBTC_borrowerOperations");
+        leafs[leafIndex].argumentAddresses[3] = getAddress(sourceChain, "WBTC_borrowerOperations");
 
         // addColl leaf
         unchecked {

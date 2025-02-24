@@ -58,7 +58,7 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
 
         // Start a fork using the hyperliquid RPC URL and a specified block.
         string memory rpcKey = "HYPERLIQUID_RPC_URL";
-        uint256 blockNumber = 18591476; 
+        uint256 blockNumber = 18619251; 
         _startFork(rpcKey, blockNumber);
 
         // Retrieve deployed protocol addresses on hyperliquid.
@@ -74,7 +74,7 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
         boringVault = new BoringVault(address(this), "Boring Vault", "BV", 18);
 
         // Deploy the manager contract.
-        manager = new ManagerWithMerkleVerification(address(this), address(boringVault), getAddress(sourceChain, "uniV3Router"));
+        manager = new ManagerWithMerkleVerification(address(this), address(boringVault), getAddress(sourceChain, "vault"));
 
         rawDataDecoderAndSanitizer = address(new FelixDecoderAndSanitizer());
 
@@ -135,12 +135,18 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
     
     function testBtcCarryStrategyExecution() external {
         console.logString("testBtcCarryStrategyExecution started");
+
+        deal(getAddress(sourceChain, "WBTC"), address(boringVault), 1_000e18);
+        console.logString("WBTC balance set");
+
         ManageLeaf[] memory leafs = new ManageLeaf[](64);
         _addFelixLeafs(leafs);
-        _addHyperliquidLeafs(leafs);
+        // _addHyperliquidLeafs(leafs);
+        console.logString("leafs generated");
 
         bytes32[][] memory manageTree = _generateMerkleTree(leafs);
         manager.setManageRoot(address(this), manageTree[manageTree.length - 1][0]);
+        _generateTestLeafs(leafs, manageTree);
         console.logString("manageRoot set");
 
         ManageLeaf[] memory manageLeafs = new ManageLeaf[](1);
@@ -158,11 +164,11 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
 
         bytes[] memory targetData = new bytes[](1);
         targetData[0] = abi.encodeWithSignature(
-            "approve(address,uint256)", getAddress(sourceChain, "WBTC_borrowerOperations"), type(uint256).max
+            "approve(address,uint256)", getAddress(sourceChain, "strategyManager"), type(uint256).max
         );
         // targetData[1] = abi.encodeWithSignature(
-        //     "openTrove(uint256,address,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)", 
-        //     0, address(this), 1_000e18, 0, 0, 0, 0, 0, address(this), address(this), address(this)
+        //     "openTrove(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)",
+        //     address(this), 0, 1_000e18, 1_00e18, 0, 0, 0, 0, address(this), address(this), address(this)
         // );
         // targetData[2] = abi.encodeWithSignature(
         //     "sendVaultTransfer(address,bool,uint64)", l1Hyperliquid, true, 1_000e18

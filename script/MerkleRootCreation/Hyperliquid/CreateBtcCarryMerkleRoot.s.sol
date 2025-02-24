@@ -35,7 +35,7 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
         setAddress(false, hyperliquid, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
 
         // Initialize leaf array
-        ManageLeaf[] memory leafs = new ManageLeaf[](64);
+        ManageLeaf[] memory leafs = new ManageLeaf[](32);
 
         // Add Felix leaves
         _addFelixLeafs(leafs);
