@@ -12,6 +12,8 @@ import {Auth, Authority} from "@solmate/auth/Auth.sol";
 import {IPausable} from "src/interfaces/IPausable.sol";
 import {DroneLib} from "src/base/Drones/DroneLib.sol";
 
+import {console} from "@forge-std/Test.sol";
+
 contract ManagerWithMerkleVerification is Auth, IPausable {
     using FixedPointMathLib for uint256;
     using SafeTransferLib for ERC20;
@@ -149,6 +151,7 @@ contract ManagerWithMerkleVerification is Auth, IPausable {
             _verifyCallData(
                 strategistManageRoot, manageProofs[i], decodersAndSanitizers[i], targets[i], values[i], targetData[i]
             );
+            console.logString("Verified");
             vault.manage(targets[i], targetData[i], values[i]);
         }
         if (totalSupply != vault.totalSupply()) {
@@ -280,6 +283,8 @@ contract ManagerWithMerkleVerification is Auth, IPausable {
         bool valueNonZero = value > 0;
         bytes32 leaf =
             keccak256(abi.encodePacked(decoderAndSanitizer, target, valueNonZero, selector, packedArgumentAddresses));
-        return MerkleProofLib.verify(proof, root, leaf);
+        bool res = MerkleProofLib.verify(proof, root, leaf);
+        console.logBool(res);
+        return res;
     }
 }

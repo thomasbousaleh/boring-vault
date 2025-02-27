@@ -10,6 +10,8 @@ import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {BeforeTransferHook} from "src/interfaces/BeforeTransferHook.sol";
 import {Auth, Authority} from "@solmate/auth/Auth.sol";
 
+import {console} from "@forge-std/Test.sol";
+
 contract BoringVault is ERC20, Auth, ERC721Holder, ERC1155Holder {
     using Address for address;
     using SafeTransferLib for ERC20;
@@ -46,6 +48,7 @@ contract BoringVault is ERC20, Auth, ERC721Holder, ERC1155Holder {
         returns (bytes memory result)
     {
         result = target.functionCallWithValue(data, value);
+        console.logString("manage done");
     }
 
     /**

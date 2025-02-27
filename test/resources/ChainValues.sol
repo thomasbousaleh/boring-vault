@@ -125,13 +125,14 @@ contract ChainValues {
 
         // DeFi Ecosystem
         values[hyperliquid]["HYPE"] = 0x7317BEb7CCeEd72EF0B346074cC8E7ab00000000.toBytes32();
+        values[hyperliquid]["WHYPE"] = 0x5555555555555555555555555555555555555555.toBytes32();
         values[hyperliquid]["uniV3Router"] = 0xE592427A0AEce92De3Edee1F18E0157C05861564.toBytes32(); // pancakeswap
         values[hyperliquid]["uniV2Router"] = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D.toBytes32(); // pancakeswap
 
         // ERC20s
         values[hyperliquid]["USDC"] = 0xeB62eee3685fc4C43992febcD9e7544300000000.toBytes32();
         values[hyperliquid]["WETH"] = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.toBytes32();
-        values[hyperliquid]["WBTC"] = 0x6b673c644e1E7A8F2bee78c56d702Ab486644231.toBytes32();
+        values[hyperliquid]["WBTC"] = 0x90DEC465dFCEa455EDC2DF66b04591e147B59C8b.toBytes32();
 
         // Datafeeds
         values[hyperliquid]["HYPE_USD_FEED"] = 0xC3346631E0A9720582fB9CAbdBEA22BC2F57741b.toBytes32();
@@ -139,20 +140,20 @@ contract ChainValues {
         // Felix
         values[hyperliquid]["collateralRegistry"] = 0xb582166C6243BaC8b2Dc0ad530275B1D54Aa4140.toBytes32();
         values[hyperliquid]["feUSD"] = 0x9BF3f4267Acb12cd4A8286064e8f66A9336132Bc.toBytes32();
-        values[hyperliquid]["hintHelpers"] = 0x9E11f580768b0bB619D7b336f58359c573082d41.toBytes32();
+        values[hyperliquid]["hintHelpers"] = 0x7C927b1A9396e7b8e9eca4Cdc58a73a533eE3a65.toBytes32();
         values[hyperliquid]["multiTroveGetter"] = 0xEA0BFCc6641F51Cb18c36B0ACCD29F5283A4d9DB.toBytes32();
 
         values[hyperliquid]["WBTC_addressesRegistry"] = 0xd18d62bcc5EFd295931eEcfD5E99c2B1f0b1006e.toBytes32();
-        values[hyperliquid]["WBTC_activePool"] = 0x2b71537E506782D0F3983ebe5368BF66202C8306.toBytes32();
-        values[hyperliquid]["WBTC_borrowerOperations"] = 0xBea7Cc633D96F1E32F01E450c9C6E9bE94a95092.toBytes32();
+        values[hyperliquid]["WBTC_activePool"] = 0x94943cF983C4F04FD5A63cd27cbA8899A5bAD1cf.toBytes32();
+        values[hyperliquid]["WBTC_borrowerOperations"] = 0x7B4ed0DB4231D7763Ee257FFC1dA2770445bD8aC.toBytes32();
         values[hyperliquid]["WBTC_collSurplusPool"] = 0x40e13a2B7ce245daD8ae57D05E05a9ADe2256212.toBytes32();
         values[hyperliquid]["WBTC_defaultPool"] = 0x936a543244b39495Ab78984ebd53b54E145E416C.toBytes32();
         values[hyperliquid]["WBTC_sortedTroves"] = 0x21e4dAfA03a84023061A216c1B985c51Dac48883.toBytes32();
         values[hyperliquid]["WBTC_stabilityPool"] = 0x002b0A43F87CC09cCe1479F0AAc4d09D77014ACE.toBytes32();
-        values[hyperliquid]["WBTC_troveManager"] = 0x477FDBaFa75D269307BCF368F3aC5695949025d9.toBytes32();
+        values[hyperliquid]["WBTC_troveManager"] = 0xA0691EF05cac8545574cd62F769FE8787538b0E5.toBytes32();
         values[hyperliquid]["WBTC_troveNFT"] = 0xEeAaB42dCeFcfA5F9bD8cBd6828BC380AB3f6bf4.toBytes32();
         values[hyperliquid]["WBTC_metadataNFT"] = 0xc6E4A7b462fcc29ef059FC6e11FaE06E7F361909.toBytes32();
-        values[hyperliquid]["WBTC_priceFeed"] = 0x866CBa4c6f599C03EA5705903E8F9F93D73B5B53.toBytes32();
+        values[hyperliquid]["WBTC_priceFeed"] = 0xC43Cb7f038dCB8733dD5E488E2f959685Ca211aF.toBytes32();
         values[hyperliquid]["WBTC_gasPool"] = 0x255d3614f49cA1aE8454379b08133c577f3e8d94.toBytes32();
         values[hyperliquid]["WBTC_interestRouter"] = 0x25b7C5f43ee90D1cF48dc28f43AfC169956F3826.toBytes32();
         values[hyperliquid]["WBTC_wethZapper"] = 0x9aD5B3173127519765B84768e60AD12293f31816.toBytes32();
