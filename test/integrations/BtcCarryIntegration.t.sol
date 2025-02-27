@@ -153,10 +153,10 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
     function _setupBalances() internal {
         // Setup initial balances
         vm.prank(getAddress(sourceChain, "strategyManager"));
-        deal(getAddress(sourceChain, "WBTC"), address(boringVault), 1_000e9);
-        deal(getAddress(sourceChain, "WBTC"), getAddress(sourceChain, "strategyManager"), 1_000e9);
-        deal(getAddress(sourceChain, "WBTC"), address(this), 1_000e9);
-        deal(getAddress(sourceChain, "WHYPE"), address(this), 1_000e9);
+        deal(getAddress(sourceChain, "WBTC"), address(boringVault), 1_000e18);
+        deal(getAddress(sourceChain, "WBTC"), getAddress(sourceChain, "strategyManager"), 1_000e18);
+        deal(getAddress(sourceChain, "WBTC"), address(this), 1_000e18);
+        deal(getAddress(sourceChain, "WHYPE"), address(this), 1_000e18);
         deal(getAddress(sourceChain, "WHYPE"), getAddress(sourceChain, "strategyManager"), 1_000e18);
     }
 
@@ -247,7 +247,7 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
         }
 
         // Setup loan parameters - use highly over-collateralized amount
-        collAmount = 1e8; // 1 WBTC
+        collAmount = 1e18; // 1 WBTC
         boldAmount = 3000e18;  // Minimum debt requirement is 2k 
         
         // Check for SCR using ITroveManagerTester
@@ -288,9 +288,6 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
         // Try fetching the price again after advancing blocks
         address priceFeedAddress = getAddress(sourceChain, "WBTC_priceFeed");
 
-        PriceFeedTestnet priceFeed = new PriceFeedTestnet();
-        vm.etch(priceFeedAddress, address(priceFeed).code);
-
         uint256 lastGoodPrice = 3761200000000000000000; // Use a known good price from previous runs
         try IPriceFeedTestnet(priceFeedAddress).lastGoodPrice() returns (uint256 price) {
             lastGoodPrice = price;
@@ -303,14 +300,8 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
             console.logUint(lastGoodPrice);
         }
         
-        try IPriceFeedTestnet(priceFeedAddress).fetchPrice() returns (uint256 newPrice, bool /* success */) {
-            console.logString("Price feed fetch successful after advancing blocks");
-            console.logString("New price:");
-            console.logUint(newPrice);  
-        } catch (bytes memory err) {
-            console.logString("Error calling price feed fetchPrice after advancing blocks:");
-            console.logBytes(err);
-        }
+        PriceFeedTestnet priceFeed = new PriceFeedTestnet();
+        vm.etch(priceFeedAddress, address(priceFeed).code);
 
         try IPriceFeedTestnet(priceFeedAddress).setPrice(lastGoodPrice * 110 / 100) returns (bool /* success */) {
             console.logString("Price feed set successfully");
