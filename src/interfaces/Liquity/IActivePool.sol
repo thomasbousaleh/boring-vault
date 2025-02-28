@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "./IInterestRouter.sol";
 import "./IBoldRewardsReceiver.sol";
 import "./TroveChange.sol";
-
+import "./IBoldToken.sol";
 interface IActivePool {
     function defaultPoolAddress() external view returns (address);
     function borrowerOperationsAddress() external view returns (address);
@@ -43,4 +43,5 @@ interface IActivePool {
     function sendCollToDefaultPool(uint256 _amount) external;
     function receiveColl(uint256 _amount) external;
     function accountForReceivedColl(uint256 _amount) external;
+    function boldToken() external view returns (IBoldToken);
 }

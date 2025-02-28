@@ -139,11 +139,11 @@ contract ChainValues {
 
         // Felix
         values[hyperliquid]["collateralRegistry"] = 0xb582166C6243BaC8b2Dc0ad530275B1D54Aa4140.toBytes32();
-        values[hyperliquid]["feUSD"] = 0x9BF3f4267Acb12cd4A8286064e8f66A9336132Bc.toBytes32();
+        values[hyperliquid]["feUSD"] = 0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce.toBytes32();
         values[hyperliquid]["hintHelpers"] = 0x7C927b1A9396e7b8e9eca4Cdc58a73a533eE3a65.toBytes32();
         values[hyperliquid]["multiTroveGetter"] = 0xEA0BFCc6641F51Cb18c36B0ACCD29F5283A4d9DB.toBytes32();
 
-        values[hyperliquid]["WBTC_addressesRegistry"] = 0xd18d62bcc5EFd295931eEcfD5E99c2B1f0b1006e.toBytes32();
+        values[hyperliquid]["WBTC_addressesRegistry"] = 0x20AE57c47d10DEaB473A2E13E7DbF2d01FC8FFBA.toBytes32();
         values[hyperliquid]["WBTC_activePool"] = 0x94943cF983C4F04FD5A63cd27cbA8899A5bAD1cf.toBytes32();
         values[hyperliquid]["WBTC_borrowerOperations"] = 0x7B4ed0DB4231D7763Ee257FFC1dA2770445bD8aC.toBytes32();
         values[hyperliquid]["WBTC_collSurplusPool"] = 0x40e13a2B7ce245daD8ae57D05E05a9ADe2256212.toBytes32();

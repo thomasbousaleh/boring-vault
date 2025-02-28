@@ -73,7 +73,7 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
 
         // Start a fork using the hyperliquid RPC URL and a specified block.
         string memory rpcKey = "HYPERLIQUID_RPC_URL";
-        uint256 blockNumber = 18891665; // Updated to a more recent block number
+        uint256 blockNumber = 18925147; // Update to a more recent block number
         _startFork(rpcKey, blockNumber);
 
         // Retrieve deployed protocol addresses on hyperliquid.
@@ -152,12 +152,8 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
     // Helper function that sets up balances
     function _setupBalances() internal {
         // Setup initial balances
-        vm.prank(getAddress(sourceChain, "strategyManager"));
         deal(getAddress(sourceChain, "WBTC"), address(boringVault), 1_000e18);
-        deal(getAddress(sourceChain, "WBTC"), getAddress(sourceChain, "strategyManager"), 1_000e18);
-        deal(getAddress(sourceChain, "WBTC"), address(this), 1_000e18);
-        deal(getAddress(sourceChain, "WHYPE"), address(this), 1_000e18);
-        deal(getAddress(sourceChain, "WHYPE"), getAddress(sourceChain, "strategyManager"), 1_000e18);
+        deal(getAddress(sourceChain, "WHYPE"), address(boringVault), 1_000e18);
     }
 
     // Helper function to create merkle tree
@@ -212,9 +208,8 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
         valueAmounts[2] = manageLeafs[2].canSendValue ? 1 : 0; // openTrove
     }
 
-    // Helper function to gather system diagnostics
+    // Helper function to gather diagnostics
     function _gatherDiagnostics() internal {
-        // DIAGNOSTICS SECTION - simplified version
         console.logString("--- DIAGNOSTICS SECTION ---");
         
         address troveManagerAddress = getAddress(sourceChain, "WBTC_troveManager");
@@ -285,7 +280,7 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
         _setupMerkleTree();
         _gatherDiagnostics();
         
-        // Try fetching the price again after advancing blocks
+        // Try fetching the price 
         address priceFeedAddress = getAddress(sourceChain, "WBTC_priceFeed");
 
         uint256 lastGoodPrice = 3761200000000000000000; // Use a known good price from previous runs
@@ -332,31 +327,28 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
         }
 
         // Prepare transaction data for trove creation
-        // Using a 2% interest rate since there aren't any active troves with valid rates in the current fork
-        // Over-collateralizing (10000 WBTC vs 1e8 boldAmount) to ensure we meet all safety ratios
         targetData[2] = abi.encodeWithSignature(
             "openTrove(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)",
-            getAddress(sourceChain, "strategyManager"), // _owner
+            getAddress(sourceChain, "boringVault"),     // _owner
             0,                                          // _ownerIndex
             collAmount,                                 // _ETHAmount
             boldAmount,                                 // _boldAmount
             0,                                          // _upperHint
             0,                                          // _lowerHint
             annualInterestRate,                         // _annualInterestRate
-            type(uint256).max,                             // _maxUpfrontFee (higher than predicted)
-            address(0),                                 // _addManager
-            address(0),                                 // _removeManager
-            address(0)                                  // _receiver
+            type(uint256).max,                          // _maxUpfrontFee (higher than predicted)
+            getAddress(sourceChain, "boringVault"),     // _addManager
+            getAddress(sourceChain, "boringVault"),     // _removeManager
+            getAddress(sourceChain, "boringVault")      // _receiver
         );
 
         console.logString("targetData generated");
         console.logString("decodersAndSanitizers generated");
 
+        uint256 wbtcBalanceBefore = ERC20(getAddress(sourceChain, "WBTC")).balanceOf(address(boringVault));
+        uint256 feusdBalanceBefore = feUSD.balanceOf(address(boringVault));
+
         // Execute transaction
-        // Note: This will actually fail with error code #edf which we're accepting as a "success"
-        // The error seems to be related to the fork state - there are no active troves with
-        // proper interest rates (we have 2 troves but both have status 0/nonExistent).
-        // In a production environment with proper troves, this would likely succeed.
         try manager.manageVaultWithMerkleVerification(
             manageProofs, 
             decodersAndSanitizers, 
@@ -368,31 +360,19 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
         } catch (bytes memory errorData) {
             console.logString("Low-level error: ");
             console.logBytes(errorData);
-            
-            // Check for known error codes
-            bytes32 errorHash = keccak256(errorData);
-            if (errorHash == keccak256(hex"23656466")) { // #edf
-                console.logString("Detected Felix error #edf - likely related to system state in the fork");
-                console.logString("Merkle verification worked, but Felix contract call failed");
-                // Treat as success for testing since the Merkle verification part worked correctly
-            } else if (errorHash == keccak256(hex"d2693ab0")) {
-                console.logString("Detected another Felix error (0xd2693ab0) - likely related to system state");
-                console.logString("Merkle verification worked, but Felix contract call failed with a different error");
-                // Treat as success for testing
-            } else {
-                console.logString("Unrecognized error. Error hash:");
-                console.logBytes32(errorHash);
-                revert("Unknown error");
-            }
         }
 
         console.logString("Test execution complete");
-        
-        uint256 wbtcBalance = ERC20(getAddress(sourceChain, "WBTC")).balanceOf(address(boringVault));
+
+        uint256 wbtcBalanceAfter = ERC20(getAddress(sourceChain, "WBTC")).balanceOf(address(boringVault));
+        uint256 feusdBalanceAfter = feUSD.balanceOf(address(boringVault));
         console.logString("Final WBTC balance:");
-        console.logUint(wbtcBalance);
+        console.logUint(wbtcBalanceAfter);
+        console.logString("Final feUSD balance:");
+        console.logUint(feusdBalanceAfter);
         
-        assertEq(wbtcBalance, 1_000e9, "WBTC balance should remain 1,000 after operations");
+        assertEq(wbtcBalanceAfter, wbtcBalanceBefore - collAmount, "WBTC balance after should have been reduced by the collateral amount");
+        assertEq(feusdBalanceAfter, feusdBalanceBefore + boldAmount, "feUSD balance after should have increased by the boldAmount");
 
         console.logString("testBtcCarryStrategyExecution complete");
     }

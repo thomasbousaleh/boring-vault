@@ -62,10 +62,10 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "openTrove",
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
-        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "strategyManager");
-        leafs[leafIndex].argumentAddresses[1] = address(0);
-        leafs[leafIndex].argumentAddresses[2] = address(0);
-        leafs[leafIndex].argumentAddresses[3] = address(0);
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+        leafs[leafIndex].argumentAddresses[1] = getAddress(sourceChain, "boringVault");
+        leafs[leafIndex].argumentAddresses[2] = getAddress(sourceChain, "boringVault");
+        leafs[leafIndex].argumentAddresses[3] = getAddress(sourceChain, "boringVault");
 
         // addColl leaf
         unchecked {
