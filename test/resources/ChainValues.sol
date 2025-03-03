@@ -130,7 +130,7 @@ contract ChainValues {
         values[hyperliquid]["uniV2Router"] = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D.toBytes32(); // pancakeswap
 
         // ERC20s
-        values[hyperliquid]["USDC"] = 0xeB62eee3685fc4C43992febcD9e7544300000000.toBytes32();
+        values[hyperliquid]["USDC"] = 0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA.toBytes32();
         values[hyperliquid]["WETH"] = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.toBytes32();
         values[hyperliquid]["WBTC"] = 0x90DEC465dFCEa455EDC2DF66b04591e147B59C8b.toBytes32();
 
@@ -188,7 +188,8 @@ contract ChainValues {
         values[hyperliquid]["stakingV1"] = 0x4f9Fbb3f1E99B56e0Fe2892e623Ed36A76Fc605d.toBytes32();
         
         // Hyperliquid
-        values[hyperliquid]["hlp"] = 0x3333333333333333333333333333333333333333.toBytes32();
+        values[hyperliquid]["hypeL1"] = 0x3333333333333333333333333333333333333333.toBytes32();
+        values[hyperliquid]["hlp"] = 0xa15099a30BBf2e68942d6F4c43d70D04FAEab0A0.toBytes32();
     }
 
     function _addMainnetValues() private {
