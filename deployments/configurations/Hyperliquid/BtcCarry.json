@@ -1,0 +1,230 @@
+{
+  "deploymentParameters": {
+    "logLevel": 4,
+    "privateKeyEnvName": "BORING_DEVELOPER",
+    "chainName": "hyperliquid",
+    "evmVersion": "paris",
+    "desiredNumberOfDeploymentTxs": 20,
+    "txBundlerAddressOrName": {
+      "address": "0x47Cec90FACc9364D7C21A8ab5e2aD9F1f75D740C",
+      "name": "txBundlerAddress"
+    },
+    "setupRoles": true,
+    "setupTestUser": true,
+    "saveDeploymentDetails": true,
+    "testUserAddressOrName": {
+      "address": "0xDd00059904ddF45e30b4131345957f76F26b8f6c",
+      "name": "dev1Address"
+    },
+    "deployerContractAddressOrName": {
+      "address": "0x63da26aadccdfafc0ff103fa53d1d9a285c74464",
+      "name": "deployerAddress"
+    },
+    "nativeWrapperAddressOrName": {
+      "address": "0x5555555555555555555555555555555555555555",
+      "name": "WETH"
+    },
+    "deploymentOwnerAddressOrName": {
+      "address": "0xDd00059904ddF45e30b4131345957f76F26b8f6c",
+      "name": "txBundlerAddress"
+    },
+    "deploymentFileName": "addresses/Hyperliquid/BtcCarry.json"
+  },
+  "rolesAuthorityConfiguration": {
+    "rolesAuthorityDeploymentName": "BTC Carry Roles Authority V0.1"
+  },
+  "lensConfiguration": {
+    "lensDeploymentName": "Arctic Architecture Lens V0.1"
+  },
+  "boringVaultConfiguration": {
+    "boringVaultDeploymentName": "BTC Carry Boring Vault V0.1",
+    "boringVaultName": "BTC Carry Vault",
+    "boringVaultSymbol": "BCV",
+    "boringVaultDecimals": 18
+  },
+  "managerConfiguration": {
+    "managerDeploymentName": "BTC Carry Manager V0.1",
+    "balancerVaultAddressOrName": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "name": "vault"
+    }
+  },
+  "accountantConfiguration": {
+    "accountantDeploymentName": "BTC Carry Accountant V0.1",
+    "accountantParameters": {
+      "kind": {
+        "variableRate": true,
+        "fixedRate": false
+      },
+      "payoutConfiguration": {
+        "payoutTo": "0x0000000000000000000000000000000000000000",
+        "optionalPaymentSplitterName": "BTC Carry Payment Splitter V0.1",
+        "splits": [
+          {
+            "to": "0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b",
+            "percent": 5000
+          },
+          {
+            "to": "0xf8553c8552f906C19286F21711721E206EE4909E",
+            "percent": 5000
+          }
+        ]
+      },
+      "accountantDeploymentParameters": {
+        "allowedExchangeRateChangeLower": 9900,
+        "allowedExchangeRateChangeUpper": 10100,
+        "baseAddressOrName": {
+          "address": "0x0000000000000000000000000000000000000000",
+          "name": "WBTC"
+        },
+        "minimumUpateDelayInSeconds": 3600,
+        "performanceFee": 1000,
+        "platformFee": 500,
+        "startingExchangeRate": 1000000
+      }
+    }
+  },
+  "tellerConfiguration": {
+    "tellerDeploymentName": "BTC Carry Teller V0.1",
+    "tellerParameters": {
+      "allowPublicDeposits": true,
+      "shareLockPeriod": 60,
+      "kind": {
+        "teller": true,
+        "tellerWithRemediation": false,
+        "tellerWithCcip": false,
+        "tellerWithLayerZero": false
+      }
+    }
+  },
+  "boringQueueConfiguration": {
+    "boringQueueDeploymentName": "BTC Carry Boring Queue V0.1",
+    "boringQueueSolverName": "BTC Carry Boring Solver V0.1",
+    "queueParameters": {
+      "allowPublicWithdrawals": true,
+      "allowPublicSelfWithdrawals": true,
+      "kind": {
+        "boringQueue": true,
+        "boringQueueWithTracking": false
+      }
+    }
+  },
+  "droneConfiguration": {
+    "droneDeploymentBaseName": "BTC Carry Drone V0.1",
+    "droneCount": 0,
+    "safeGasToForwardNative": 21000
+  },
+  "pauserConfiguration": {
+    "shouldDeploy": true,
+    "pauserDeploymentName": "BTC Carry Pauser V0.1",
+    "makeGenericPauser": ["0x0000000000000000000000000000000000000000"],
+    "makeGenericUnpauser": ["0x0000000000000000000000000000000000000000"],
+    "makePauseAll": ["0x0000000000000000000000000000000000000000"],
+    "makeUnpauseAll": ["0x0000000000000000000000000000000000000000"],
+    "senderToPausable": [
+      {
+        "sender": "0x0000000000000000000000000000000000000000",
+        "pausable": "0x0000000000000000000000000000000000000000"
+      }
+    ]
+  },
+  "timelockConfiguration": {
+    "shouldDeploy": false,
+    "timelockDeploymentName": "BTC Carry Timelock V0.1",
+    "timelockParameters": {
+      "minDelay": 86400,
+      "proposers": ["0x0000000000000000000000000000000000000000"],
+      "executors": ["0x0000000000000000000000000000000000000000"]
+    }
+  },
+  "accountantAssets": [
+    {
+      "addressOrName": {
+        "address": "0x90DEC465dFCEa455EDC2DF66b04591e147B59C8b",
+        "name": "WBTC"
+      },
+      "isPeggedToBase": true,
+      "rateProvider": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "addressOrName": {
+        "address": "0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce",
+        "name": "feUSD" 
+      },
+      "isPeggedToBase": false,
+      "rateProvider": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "addressOrName": {
+        "address": "0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA", 
+        "name": "USDC"
+      },
+      "isPeggedToBase": false,
+      "rateProvider": "0x0000000000000000000000000000000000000000"
+    }
+  ],
+  "depositAssets": [
+    {
+      "addressOrName": {
+        "address": "0x90DEC465dFCEa455EDC2DF66b04591e147B59C8b",
+        "name": "WBTC"
+      },
+      "allowDeposits": true,
+      "allowWithdraws": true,
+      "sharePremium": 0
+    },
+    {
+      "addressOrName": {
+        "address": "0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce",
+        "name": "feUSD"
+      },
+      "allowDeposits": true,
+      "allowWithdraws": true,
+      "sharePremium": 0
+    },
+    {
+      "addressOrName": {
+        "address": "0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA",
+        "name": "USDC"
+      },
+      "allowDeposits": true,
+      "allowWithdraws": true, 
+      "sharePremium": 0
+    }
+  ],
+  "withdrawAssets": [
+    {
+      "addressOrName": {
+        "address": "0x90DEC465dFCEa455EDC2DF66b04591e147B59C8b",
+        "name": "WBTC"
+      },
+      "maxDiscount": 100,
+      "minDiscount": 0,
+      "minimumSecondsToDeadline": 3600,
+      "minimumShares": 0,
+      "secondsToMaturity": 60
+    },
+    {
+      "addressOrName": {
+        "address": "0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce",
+        "name": "feUSD"
+      },
+      "maxDiscount": 100,
+      "minDiscount": 0,
+      "minimumSecondsToDeadline": 3600,
+      "minimumShares": 0,
+      "secondsToMaturity": 60
+    },
+    {
+      "addressOrName": {
+        "address": "0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA",
+        "name": "USDC"
+      },
+      "maxDiscount": 100,
+      "minDiscount": 0,
+      "minimumSecondsToDeadline": 3600,
+      "minimumShares": 0,
+      "secondsToMaturity": 60
+    }
+  ]
+}
