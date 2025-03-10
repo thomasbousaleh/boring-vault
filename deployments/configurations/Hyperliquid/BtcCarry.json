@@ -3,10 +3,10 @@
     "logLevel": 4,
     "privateKeyEnvName": "BORING_DEVELOPER",
     "chainName": "hyperliquid",
-    "evmVersion": "paris",
+    "evmVersion": "shanghai",
     "desiredNumberOfDeploymentTxs": 20,
     "txBundlerAddressOrName": {
-      "address": "0x47Cec90FACc9364D7C21A8ab5e2aD9F1f75D740C",
+      "address": "0x63da26aadccdfafc0ff103fa53d1d9a285c74464",
       "name": "txBundlerAddress"
     },
     "setupRoles": true,
@@ -22,10 +22,10 @@
     },
     "nativeWrapperAddressOrName": {
       "address": "0x5555555555555555555555555555555555555555",
-      "name": "WETH"
+      "name": "WHYPE"
     },
     "deploymentOwnerAddressOrName": {
-      "address": "0xDd00059904ddF45e30b4131345957f76F26b8f6c",
+      "address": "0x63da26aadccdfafc0ff103fa53d1d9a285c74464",
       "name": "txBundlerAddress"
     },
     "deploymentFileName": "addresses/Hyperliquid/BtcCarry.json"
@@ -65,7 +65,7 @@
             "percent": 5000
           },
           {
-            "to": "0xf8553c8552f906C19286F21711721E206EE4909E",
+            "to": "0xDd00059904ddF45e30b4131345957f76F26b8f6c",
             "percent": 5000
           }
         ]
@@ -74,7 +74,7 @@
         "allowedExchangeRateChangeLower": 9900,
         "allowedExchangeRateChangeUpper": 10100,
         "baseAddressOrName": {
-          "address": "0x0000000000000000000000000000000000000000",
+          "address": "0x90DEC465dFCEa455EDC2DF66b04591e147B59C8b",
           "name": "WBTC"
         },
         "minimumUpateDelayInSeconds": 3600,
@@ -115,12 +115,12 @@
     "safeGasToForwardNative": 21000
   },
   "pauserConfiguration": {
-    "shouldDeploy": true,
+    "shouldDeploy": false,
     "pauserDeploymentName": "BTC Carry Pauser V0.1",
-    "makeGenericPauser": ["0x0000000000000000000000000000000000000000"],
-    "makeGenericUnpauser": ["0x0000000000000000000000000000000000000000"],
-    "makePauseAll": ["0x0000000000000000000000000000000000000000"],
-    "makeUnpauseAll": ["0x0000000000000000000000000000000000000000"],
+    "makeGenericPauser": ["0xDd00059904ddF45e30b4131345957f76F26b8f6c"],
+    "makeGenericUnpauser": ["0xDd00059904ddF45e30b4131345957f76F26b8f6c"],
+    "makePauseAll": ["0xDd00059904ddF45e30b4131345957f76F26b8f6c"],
+    "makeUnpauseAll": ["0xDd00059904ddF45e30b4131345957f76F26b8f6c"],
     "senderToPausable": [
       {
         "sender": "0x0000000000000000000000000000000000000000",
@@ -144,23 +144,23 @@
         "name": "WBTC"
       },
       "isPeggedToBase": true,
-      "rateProvider": "0x0000000000000000000000000000000000000000"
+      "rateProvider": "0xc43cb7f038dcb8733dd5e488e2f959685ca211af"
     },
     {
       "addressOrName": {
         "address": "0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce",
         "name": "feUSD" 
       },
-      "isPeggedToBase": false,
-      "rateProvider": "0x0000000000000000000000000000000000000000"
+      "isPeggedToBase": true,
+      "rateProvider": "0xc43cb7f038dcb8733dd5e488e2f959685ca211af"
     },
     {
       "addressOrName": {
         "address": "0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA", 
         "name": "USDC"
       },
-      "isPeggedToBase": false,
-      "rateProvider": "0x0000000000000000000000000000000000000000"
+      "isPeggedToBase": true,
+      "rateProvider": "0xc43cb7f038dcb8733dd5e488e2f959685ca211af"
     }
   ],
   "depositAssets": [
