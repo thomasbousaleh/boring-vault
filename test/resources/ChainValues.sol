@@ -178,7 +178,7 @@ contract ChainValues {
         values[hyperliquid]["FUNDS_SAFE"] = 0xF06016D822943C42e3Cb7FC3a6A3B1889C1045f8.toBytes32();
 
         values[hyperliquid]["governance"] = 0x636dEb767Cd7D0f15ca4aB8eA9a9b26E98B426AC.toBytes32();
-        values[hyperliquid]["curveUsdcFeUSDPool"] = 0xaDb6851875B7496E3D565B754d8a79508480a203.toBytes32();
+        values[hyperliquid]["curveUsdcFeUSDPool"] = 0xdA212dd27F531A9F888B7cdF31Ee3b5A4771793D.toBytes32();
         values[hyperliquid]["curveUsdcFeUSDGauge"] = 0xA8bB51606dB8e81F0ac964f0855C20D9e474Ab63.toBytes32();
         values[hyperliquid]["curveUsdcFeUSDInitiative"] = 0xa76434D58cCC9b8277180a691148A598Fd073035.toBytes32();
         values[hyperliquid]["curvefeUSDFelixPool"] = 0x29A760138FA530d51a100171cB5CE4DDf506aF2E.toBytes32();

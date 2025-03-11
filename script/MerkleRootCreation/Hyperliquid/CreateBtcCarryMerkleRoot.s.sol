@@ -40,21 +40,11 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
         // Add Felix leaves
         _addFelixLeafs(leafs);
 
+        // Add Curve leaves
+        _addLeafsForCurveSwapping(leafs, getAddress(sourceChain, "curveUsdcFeUSDPool"));
+
         // Add Hyperliquid leaves
         _addHyperliquidLeafs(leafs);
-
-        // Add swap leaf
-        unchecked {
-            leafIndex++;
-        }
-        leafs[leafIndex] = ManageLeaf(
-            swap,
-            false,
-            "swap(uint256)",
-            new address[](0),
-            "BTC Carry: perform swap",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
-        );
 
         _verifyDecoderImplementsLeafsFunctionSelectors(leafs);
 
