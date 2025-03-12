@@ -6,7 +6,7 @@
     "evmVersion": "shanghai",
     "desiredNumberOfDeploymentTxs": 20,
     "txBundlerAddressOrName": {
-      "address": "0x63da26aadccdfafc0ff103fa53d1d9a285c74464",
+      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
       "name": "txBundlerAddress"
     },
     "setupRoles": true,
@@ -17,7 +17,7 @@
       "name": "dev1Address"
     },
     "deployerContractAddressOrName": {
-      "address": "0x63da26aadccdfafc0ff103fa53d1d9a285c74464",
+      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
       "name": "deployerAddress"
     },
     "nativeWrapperAddressOrName": {
@@ -25,7 +25,7 @@
       "name": "WHYPE"
     },
     "deploymentOwnerAddressOrName": {
-      "address": "0x63da26aadccdfafc0ff103fa53d1d9a285c74464",
+      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
       "name": "txBundlerAddress"
     },
     "deploymentFileName": "addresses/Hyperliquid/BtcCarry.json"
@@ -59,16 +59,7 @@
       "payoutConfiguration": {
         "payoutTo": "0x0000000000000000000000000000000000000000",
         "optionalPaymentSplitterName": "BTC Carry Payment Splitter V0.1",
-        "splits": [
-          {
-            "to": "0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b",
-            "percent": 5000
-          },
-          {
-            "to": "0xDd00059904ddF45e30b4131345957f76F26b8f6c",
-            "percent": 5000
-          }
-        ]
+        "splits": []
       },
       "accountantDeploymentParameters": {
         "allowedExchangeRateChangeLower": 9900,
@@ -144,23 +135,7 @@
         "name": "WBTC"
       },
       "isPeggedToBase": true,
-      "rateProvider": "0xc43cb7f038dcb8733dd5e488e2f959685ca211af"
-    },
-    {
-      "addressOrName": {
-        "address": "0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce",
-        "name": "feUSD" 
-      },
-      "isPeggedToBase": true,
-      "rateProvider": "0xc43cb7f038dcb8733dd5e488e2f959685ca211af"
-    },
-    {
-      "addressOrName": {
-        "address": "0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA", 
-        "name": "USDC"
-      },
-      "isPeggedToBase": true,
-      "rateProvider": "0xc43cb7f038dcb8733dd5e488e2f959685ca211af"
+      "rateProvider": "0x0000000000000000000000000000000000000000"
     }
   ],
   "depositAssets": [
@@ -172,24 +147,6 @@
       "allowDeposits": true,
       "allowWithdraws": true,
       "sharePremium": 0
-    },
-    {
-      "addressOrName": {
-        "address": "0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce",
-        "name": "feUSD"
-      },
-      "allowDeposits": true,
-      "allowWithdraws": true,
-      "sharePremium": 0
-    },
-    {
-      "addressOrName": {
-        "address": "0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA",
-        "name": "USDC"
-      },
-      "allowDeposits": true,
-      "allowWithdraws": true, 
-      "sharePremium": 0
     }
   ],
   "withdrawAssets": [
@@ -197,28 +154,6 @@
       "addressOrName": {
         "address": "0x90DEC465dFCEa455EDC2DF66b04591e147B59C8b",
         "name": "WBTC"
-      },
-      "maxDiscount": 100,
-      "minDiscount": 0,
-      "minimumSecondsToDeadline": 3600,
-      "minimumShares": 0,
-      "secondsToMaturity": 60
-    },
-    {
-      "addressOrName": {
-        "address": "0x6468D240A48EC1a86403Ac77fD47aA9bcB38b5ce",
-        "name": "feUSD"
-      },
-      "maxDiscount": 100,
-      "minDiscount": 0,
-      "minimumSecondsToDeadline": 3600,
-      "minimumShares": 0,
-      "secondsToMaturity": 60
-    },
-    {
-      "addressOrName": {
-        "address": "0x24ac48bf01fd6CB1C3836D08b3EdC70a9C4380cA",
-        "name": "USDC"
       },
       "maxDiscount": 100,
       "minDiscount": 0,

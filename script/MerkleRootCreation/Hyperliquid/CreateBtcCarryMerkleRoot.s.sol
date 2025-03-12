@@ -18,9 +18,6 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
     address public accountantAddress = 0x3333333333333333333333333333333333333333;
     address public rawDataDecoderAndSanitizer = 0x4444444444444444444444444444444444444444;
 
-    // Added swap contract address for btc carry strategy
-    address public swap = 0x9999999999999999999999999999999999999999;
-
     function setUp() external {}
 
     function run() external {
@@ -35,16 +32,35 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
         setAddress(false, hyperliquid, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
 
         // Initialize leaf array
-        ManageLeaf[] memory leafs = new ManageLeaf[](32);
+        ManageLeaf[] memory leafs = new ManageLeaf[](36);
 
         // Add Felix leaves
         _addFelixLeafs(leafs);
 
-        // Add Curve leaves
-        _addLeafsForCurveSwapping(leafs, getAddress(sourceChain, "curveUsdcFeUSDPool"));
-
         // Add Hyperliquid leaves
         _addHyperliquidLeafs(leafs);
+
+        // Add feUSD approval and curve swap leaves
+        uint feUSDApprovalIndex = 19; 
+        leafs[feUSDApprovalIndex] = ManageLeaf(
+            getAddress(sourceChain, "feUSD"), 
+            false, 
+            "approve(address,uint256)", 
+            new address[](1), 
+            string.concat("Approve Curve pool to spend feUSD"), 
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer") 
+        );
+        leafs[feUSDApprovalIndex].argumentAddresses[0] = getAddress(sourceChain, "curveUsdcFeUSDPool");
+        
+        uint curveSwapIndex = 20; 
+        leafs[curveSwapIndex] = ManageLeaf(
+            getAddress(sourceChain, "curveUsdcFeUSDPool"), 
+            false, 
+            "exchange(int128,int128,uint256,uint256)", 
+            new address[](0), 
+            string.concat("Swap feUSD to USDC using Curve pool with fixed amount"), 
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer") 
+        );
 
         _verifyDecoderImplementsLeafsFunctionSelectors(leafs);
 
