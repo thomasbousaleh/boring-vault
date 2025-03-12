@@ -195,7 +195,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             false,
             "approve(address,uint256)",
             new address[](1),
-            string.concat("Approve Strategy Manager to spend"),
+            string.concat("Approve HLP to spend"),
             getAddress(sourceChain, "rawDataDecoderAndSanitizer")
         );
         leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
@@ -205,7 +205,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
-            getAddress(sourceChain, "hlp"),
+            getAddress(sourceChain, "hypeL1Write"),
             false,
             "sendVaultTransfer(address,bool,uint64)",
             new address[](1),
@@ -219,7 +219,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
-            getAddress(sourceChain, "hypeL1"),
+            getAddress(sourceChain, "hypeL1Write"),
             false,
             "sendTokenDelegate(address,uint64,bool)",
             new address[](1),
@@ -233,7 +233,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
-            getAddress(sourceChain, "hypeL1"),
+            getAddress(sourceChain, "hypeL1Write"),
             false,
             "sendSpot(address,uint64,uint64)",
             new address[](1),
@@ -247,7 +247,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
-            getAddress(sourceChain, "hypeL1"),
+            getAddress(sourceChain, "hypeL1Write"),
             false,
             "sendIocOrder(uint16,bool,uint64,uint64)",
             new address[](0),
@@ -260,7 +260,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
-            getAddress(sourceChain, "hypeL1"),
+            getAddress(sourceChain, "hypeL1Write"),
             false,
             "sendCDeposit(uint64)",
             new address[](0),
@@ -273,7 +273,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
-            getAddress(sourceChain, "hypeL1"),
+            getAddress(sourceChain, "hypeL1Write"),
             false,
             "sendCWithdrawal(uint64)",
             new address[](0),
@@ -286,7 +286,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             leafIndex++;
         }
         leafs[leafIndex] = ManageLeaf(
-            getAddress(sourceChain, "hypeL1"),
+            getAddress(sourceChain, "hypeL1Write"),
             false,
             "sendUsdClassTransfer(uint64,bool)",
             new address[](0),
