@@ -34,7 +34,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "approve(address,uint256)",
             new address[](1),
             string.concat("Approve Strategy Manager to spend"),
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
         leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "WBTC_borrowerOperations");
 
@@ -47,7 +47,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "approve(address,uint256)",
             new address[](1),
             string.concat("Approve Strategy Manager to spend"),
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
         leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "WBTC_borrowerOperations");
         
@@ -60,12 +60,12 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "openTrove(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)",
             new address[](4),
             "openTrove",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
-        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
-        leafs[leafIndex].argumentAddresses[1] = getAddress(sourceChain, "boringVault");
-        leafs[leafIndex].argumentAddresses[2] = getAddress(sourceChain, "boringVault");
-        leafs[leafIndex].argumentAddresses[3] = getAddress(sourceChain, "boringVault");
+        leafs[leafIndex].argumentAddresses[0] = address(0x208EeF7B7D1AcEa7ED4964d3C5b0c194aDf17412);
+        leafs[leafIndex].argumentAddresses[1] = address(0x208EeF7B7D1AcEa7ED4964d3C5b0c194aDf17412);
+        leafs[leafIndex].argumentAddresses[2] = address(0x208EeF7B7D1AcEa7ED4964d3C5b0c194aDf17412);
+        leafs[leafIndex].argumentAddresses[3] = address(0x208EeF7B7D1AcEa7ED4964d3C5b0c194aDf17412);
 
         // addColl leaf
         unchecked {
@@ -77,7 +77,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "addColl(uint256,uint256)",
             new address[](0),
             "Call addColl",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // withdrawColl leaf
@@ -90,7 +90,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "withdrawColl(uint256,uint256)",
             new address[](0),
             "Call withdrawColl",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // withdrawBold leaf
@@ -103,7 +103,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "withdrawBold(uint256,uint256,uint256)",
             new address[](0),
             "Call withdrawBold",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // repayBold leaf
@@ -116,7 +116,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "repayBold(uint256,uint256)",
             new address[](0),
             "Call repayBold",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // closeTrove leaf
@@ -129,7 +129,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "closeTrove(uint256)",
             new address[](0),
             "Call closeTrove",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // adjustTrove leaf
@@ -142,7 +142,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "adjustTrove(uint256,uint256,bool,uint256,bool,uint256)",
             new address[](0),
             "Call adjustTrove",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // applyPendingDebt leaf
@@ -155,7 +155,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "applyPendingDebt(uint256,uint256,uint256)",
             new address[](0),
             "Call applyPendingDebt",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // claimCollateral leaf
@@ -168,7 +168,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "claimCollateral()",
             new address[](0),
             "Call claimCollateral",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // shutdown leaf
@@ -181,7 +181,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "shutdown()",
             new address[](0),
             "Call shutdown",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
     }
 
@@ -196,7 +196,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "approve(address,uint256)",
             new address[](1),
             string.concat("Approve HLP to spend"),
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
         leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
 
@@ -210,7 +210,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "sendVaultTransfer(address,bool,uint64)",
             new address[](1),
             "Hyperliquid: vault transfer",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
         leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
 
@@ -224,7 +224,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "sendTokenDelegate(address,uint64,bool)",
             new address[](1),
             "Hyperliquid: token delegate",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
         leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
 
@@ -238,7 +238,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "sendSpot(address,uint64,uint64)",
             new address[](1),
             "Hyperliquid: spot send",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
         leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "hlp");
 
@@ -252,7 +252,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "sendIocOrder(uint16,bool,uint64,uint64)",
             new address[](0),
             "Hyperliquid: IOC order",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // sendCDeposit leaf
@@ -265,7 +265,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "sendCDeposit(uint64)",
             new address[](0),
             "Hyperliquid: CDeposit",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // sendCWithdrawal leaf
@@ -278,7 +278,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "sendCWithdrawal(uint64)",
             new address[](0),
             "Hyperliquid: CWithdrawal",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
 
         // sendUsdClassTransfer leaf
@@ -291,7 +291,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
             "sendUsdClassTransfer(uint64,bool)",
             new address[](0),
             "Hyperliquid: USD Class Transfer",
-            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)
         );
     }
 

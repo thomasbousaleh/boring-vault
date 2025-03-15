@@ -146,7 +146,7 @@ contract BtcCarryIntegrationTest is Test, MerkleTreeHelper {
 
         // Start a fork using the hyperliquid RPC URL and a specified block.
         string memory rpcKey = "HYPERLIQUID_RPC_URL";
-        uint256 blockNumber = 19463260; // Updated to latest known block number
+        uint256 blockNumber = 19505451; // Updated to latest known block number
         _startFork(rpcKey, blockNumber);
 
         // Retrieve deployed protocol addresses on hyperliquid.

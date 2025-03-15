@@ -107,15 +107,16 @@ contract ChainValues {
     }
 
     function _addHyperliquidValues() private {
-        values[hyperliquid]["boringDeployerContract"] = 0xFD65ADF7d2f9ea09287543520a703522E0a360C9.toBytes32();
-        values[hyperliquid]["deployerAddress"] = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d.toBytes32();
-        values[hyperliquid]["dev0Address"] = 0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b.toBytes32();
-        values[hyperliquid]["dev1Address"] = 0xf8553c8552f906C19286F21711721E206EE4909E.toBytes32();
-        values[hyperliquid]["txBundlerAddress"] = 0x47Cec90FACc9364D7C21A8ab5e2aD9F1f75D740C.toBytes32(); 
+        values[hyperliquid]["boringDeployerContract"] = 0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95.toBytes32();
+        values[hyperliquid]["deployerAddress"] = 0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95.toBytes32();
+        values[hyperliquid]["dev0Address"] = 0xDd00059904ddF45e30b4131345957f76F26b8f6c.toBytes32();
+        values[hyperliquid]["dev1Address"] = 0xDd00059904ddF45e30b4131345957f76F26b8f6c.toBytes32();
+        values[hyperliquid]["txBundlerAddress"] = 0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95.toBytes32(); 
         values[hyperliquid]["delayedWithdraw"] = 0x75E3f26Ceff44258CE8cB451D7d2cC8966Ef3554.toBytes32();
-        values[hyperliquid]["onChainQueue"] = 0x74EC75fb641ec17B04007733d9efBE2D1dA5CA2C.toBytes32();
-        values[hyperliquid]["teller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();
-        values[hyperliquid]["strategyManager"] = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d.toBytes32();
+        values[hyperliquid]["onChainQueue"] = 0xC3EAb16f44539C6081a327543eb80e8870C1Dec4.toBytes32();
+        values[hyperliquid]["teller"] = 0xe8b75fB8208cC4d3054fE9793D9748fb3D34D450.toBytes32();
+        values[hyperliquid]["strategyManager"] = 0xDd00059904ddF45e30b4131345957f76F26b8f6c.toBytes32();
+        values[hyperliquid]["rawDataDecoderAndSanitizer"] = 0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0.toBytes32();
 
         // Tellers
         values[hyperliquid]["hypeBTCTeller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();

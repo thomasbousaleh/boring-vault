@@ -4,7 +4,7 @@
     "privateKeyEnvName": "BORING_DEVELOPER",
     "chainName": "hyperliquid",
     "evmVersion": "shanghai",
-    "desiredNumberOfDeploymentTxs": 20,
+    "desiredNumberOfDeploymentTxs": 2000,
     "txBundlerAddressOrName": {
       "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
       "name": "txBundlerAddress"

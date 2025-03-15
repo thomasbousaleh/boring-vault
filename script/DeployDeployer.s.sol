@@ -23,7 +23,7 @@ contract DeployDeployerScript is Script, ContractNames, Test {
     Deployer public deployer;
 
     //address public deployerAddress = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d;
-    address public deployerAddress = 0x63dA26AaDcCDfafC0FF103FA53d1D9A285c74464;
+    address public deployerAddress = 0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95;
     //address public dev0Address = 0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b;
     address public dev0Address = 0xDd00059904ddF45e30b4131345957f76F26b8f6c;
     address public dev1Address = 0xDd00059904ddF45e30b4131345957f76F26b8f6c;

@@ -28,11 +28,13 @@ import {SonicMainnetDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/So
 import {AaveV3FullDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/AaveV3FullDecoderAndSanitizer.sol"; 
 import {LombardBtcDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/LombardBtcDecoderAndSanitizer.sol"; 
 import {StakedSonicUSDDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/StakedSonicUSDDecoderAndSanitizer.sol"; 
+import {BtcCarryDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/BtcCarryDecoderAndSanitizer.sol"; 
 
 import {BoringDrone} from "src/base/Drones/BoringDrone.sol";
 
 import "forge-std/Script.sol";
 import "forge-std/StdJson.sol";
+import "forge-std/console.sol";
 /**
  *  source .env && forge script script/DeployDecoderAndSanitizer.s.sol:DeployDecoderAndSanitizerScript --with-gas-price 30000000000 --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
@@ -40,12 +42,12 @@ import "forge-std/StdJson.sol";
 
 contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddresses, MerkleTreeHelper {
     uint256 public privateKey;
-    Deployer public deployer = Deployer(deployerAddress);
+    Deployer public deployer = Deployer(0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95);
 
     function setUp() external {
         privateKey = vm.envUint("BORING_DEVELOPER");
-        vm.createSelectFork("sonicMainnet");
-        setSourceChainName(sonicMainnet);
+        // vm.createSelectFork("sonicMainnet");
+        // setSourceChainName(sonicMainnet);
     }
 
     function run() external {
@@ -117,12 +119,18 @@ contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddres
         //constructorArgs = abi.encode(uniswapV3NonFungiblePositionManager); 
         //deployer.deployContract("Lombard BTC Decoder And Sanitizer V0.2", creationCode, constructorArgs, 0);
         
-        address univ3 = getAddress(sourceChain, "uniswapV3NonFungiblePositionManager"); 
-        if (univ3 == address(0)) revert("fail"); 
+        // address univ3 = getAddress(sourceChain, "uniswapV3NonFungiblePositionManager"); 
+        // if (univ3 == address(0)) revert("fail"); 
 
-        creationCode = type(StakedSonicUSDDecoderAndSanitizer).creationCode;
-        constructorArgs = abi.encode(univ3); 
-        deployer.deployContract("Staked Sonic USD Decoder And Sanitizer V0.2", creationCode, constructorArgs, 0);
+        // creationCode = type(StakedSonicUSDDecoderAndSanitizer).creationCode;
+        // constructorArgs = abi.encode(univ3); 
+        // deployer.deployContract("Staked Sonic USD Decoder And Sanitizer V0.2", creationCode, constructorArgs, 0);
+
+        creationCode = type(BtcCarryDecoderAndSanitizer).creationCode;
+        constructorArgs = hex""; 
+        address btcCarry = deployer.deployContract("BTC Carry Decoder And Sanitizer V0.0", creationCode, constructorArgs, 0);
+        console.logString("BTC Carry Decoder And Sanitizer V0.0 deployed at");
+        console.logAddress(btcCarry);
 
         vm.stopBroadcast();
     }
