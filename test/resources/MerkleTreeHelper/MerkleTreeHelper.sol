@@ -193,7 +193,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues, Test {
         leafs[leafIndex] = ManageLeaf(
             getAddress(sourceChain, "USDC"),
             false,
-            "approve(address,uint256)",
+            "transfer(address,uint256)",
             new address[](1),
             string.concat("Approve HLP to spend"),
             address(0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0)

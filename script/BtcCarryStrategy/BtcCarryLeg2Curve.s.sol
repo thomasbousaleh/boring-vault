@@ -81,12 +81,12 @@ contract BtcCarryLeg2CurveSwapScript is BtcCarryBase {
         ERC20 feUSD = ERC20(getAddress(sourceChain, "feUSD"));
         ERC20 usdc = ERC20(getAddress(sourceChain, "USDC"));
 
-        // Copy the Curve operations from the base arrays (indices 1 and 2, which are feUSD approval and swap)
+        // Copy the Curve operations from the base arrays (indices 6 and 7 for feUSD approval and swap)
         for (uint8 i = 0; i < 2; i++) {
-            curveProofs[i] = manageProofs[i+1];
-            curveTargets[i] = targets[i+1];
-            curveDecodersAndSanitizers[i] = decodersAndSanitizers[i+1];
-            curveValueAmounts[i] = valueAmounts[i+1];
+            curveProofs[i] = manageProofs[i+6];
+            curveTargets[i] = targets[i+6];
+            curveDecodersAndSanitizers[i] = decodersAndSanitizers[i+6];
+            curveValueAmounts[i] = valueAmounts[i+6];
         }
         
         // Get the current feUSD balance

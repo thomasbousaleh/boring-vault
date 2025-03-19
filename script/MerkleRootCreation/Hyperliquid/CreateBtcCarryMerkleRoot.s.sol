@@ -13,10 +13,10 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
     using FixedPointMathLib for uint256;
 
     // Updated common addresses for Hyperliquid testnet
-    address public boringVault = 0x1111111111111111111111111111111111111111;
-    address public managerAddress = 0x2222222222222222222222222222222222222222;
-    address public accountantAddress = 0x3333333333333333333333333333333333333333;
-    address public rawDataDecoderAndSanitizer = 0x4444444444444444444444444444444444444444;
+    address public boringVault = 0x208EeF7B7D1AcEa7ED4964d3C5b0c194aDf17412;
+    address public managerAddress = 0x97b087906781D9CBf1a22E7B3e4Af3c7e4802AC4;
+    address public accountantAddress = 0x567fca0423b8fb84E151Cd2fA954555D2323622e;
+    address public rawDataDecoderAndSanitizer = 0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0;
 
     function setUp() external {}
 
@@ -32,7 +32,7 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
         setAddress(false, hyperliquid, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
 
         // Initialize leaf array
-        ManageLeaf[] memory leafs = new ManageLeaf[](36);
+        ManageLeaf[] memory leafs = new ManageLeaf[](64);
 
         // Add Felix leaves
         _addFelixLeafs(leafs);
@@ -41,7 +41,7 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
         _addHyperliquidLeafs(leafs);
 
         // Add feUSD approval and curve swap leaves
-        uint feUSDApprovalIndex = 19; 
+        uint feUSDApprovalIndex = 20; 
         leafs[feUSDApprovalIndex] = ManageLeaf(
             getAddress(sourceChain, "feUSD"), 
             false, 
@@ -52,7 +52,7 @@ contract CreateBtcCarryMerkleRootScript is Script, MerkleTreeHelper {
         );
         leafs[feUSDApprovalIndex].argumentAddresses[0] = getAddress(sourceChain, "curveUsdcFeUSDPool");
         
-        uint curveSwapIndex = 20; 
+        uint curveSwapIndex = 21; 
         leafs[curveSwapIndex] = ManageLeaf(
             getAddress(sourceChain, "curveUsdcFeUSDPool"), 
             false, 

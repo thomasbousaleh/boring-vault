@@ -17,10 +17,10 @@ interface IHyperliquidVault {
  * @dev This script deposits USDC into the Hyperliquid vault
  *
  * To run on testnet:
- * forge script script/BtcCarryStrategy/BtcCarryLeg3Hyperliquid.s.sol:BtcCarryLeg3HyperliquidScript --rpc-url $RPC_URL --broadcast
+ * forge script script/BtcCarryStrategy/BtcCarryLeg3Hyperliquid.s.sol:BtcCarryLeg3HyperliquidScript --rpc-url $RPC_URL --broadcast --skip-simulation --legacy
  *
  * To run on mainnet:
- * forge script script/BtcCarryStrategy/BtcCarryLeg3Hyperliquid.s.sol:BtcCarryLeg3HyperliquidScript --rpc-url $MAINNET_RPC_URL --broadcast --verify
+ * forge script script/BtcCarryStrategy/BtcCarryLeg3Hyperliquid.s.sol:BtcCarryLeg3HyperliquidScript --rpc-url $MAINNET_RPC_URL --broadcast --skip-simulation --legacy --verify
  */
 contract BtcCarryLeg3HyperliquidScript is BtcCarryBase {
     // Default USDC amount to deposit (will be determined at runtime)
@@ -54,6 +54,9 @@ contract BtcCarryLeg3HyperliquidScript is BtcCarryBase {
         } else {
             depositAmount = uint64(usdcBalance);
         }
+
+        depositAmount = depositAmount / 1e2;
+        depositAmount = depositAmount / 500;
         
         // Allow depositing a portion of the balance via environment variable
         uint256 depositPercentage = vm.envOr("DEPOSIT_PERCENTAGE", uint256(100)); // 100% default
@@ -61,7 +64,8 @@ contract BtcCarryLeg3HyperliquidScript is BtcCarryBase {
             uint256 adjustedAmount = uint256(depositAmount) * depositPercentage / 100;
             depositAmount = uint64(adjustedAmount);
         }
-        
+        console.logString("Deposit amount:");
+        console.logUint(depositAmount);
         
         // Prepare for transaction
         uint256 pk = getPrivateKey();
@@ -84,18 +88,18 @@ contract BtcCarryLeg3HyperliquidScript is BtcCarryBase {
     function executeHyperliquidDeposit() public {
         console.log("Executing Hyperliquid deposit operations...");
         
-        // Create new arrays with only the Hyperliquid operations (operations 3 and 4 in the base)
-        bytes32[][] memory hyperliquidProofs = new bytes32[][](2);
-        address[] memory hyperliquidTargets = new address[](2);
-        bytes[] memory hyperliquidData = new bytes[](2);
-        address[] memory hyperliquidDecodersAndSanitizers = new address[](2);
-        uint256[] memory hyperliquidValueAmounts = new uint256[](2);
+        // Create new arrays with only the Hyperliquid operations 
+        bytes32[][] memory hyperliquidProofs = new bytes32[][](3);
+        address[] memory hyperliquidTargets = new address[](3);
+        bytes[] memory hyperliquidData = new bytes[](3);
+        address[] memory hyperliquidDecodersAndSanitizers = new address[](3);
+        uint256[] memory hyperliquidValueAmounts = new uint256[](3);
 
-        address l1Hyperliquid = getAddress(sourceChain, "hypeL1Write");
-        address hlp = getAddress(sourceChain, "HLP");
+        // address l1Hyperliquid = getAddress(sourceChain, "hypeL1Write");
+        address hlp = getAddress(sourceChain, "hlp");
 
         // Copy the Hyperliquid operations from the base arrays (indices 3 and 4, which are HLP approval and deposit)
-        for (uint8 i = 0; i < 2; i++) {
+        for (uint8 i = 0; i < 3; i++) {
             hyperliquidProofs[i] = manageProofs[i+3];
             hyperliquidTargets[i] = targets[i+3];
             hyperliquidDecodersAndSanitizers[i] = decodersAndSanitizers[i+3];
@@ -106,26 +110,25 @@ contract BtcCarryLeg3HyperliquidScript is BtcCarryBase {
         
         // USDC approval for HLP
         hyperliquidData[0] = abi.encodeWithSignature(
-            "approve(address,uint256)",
+            "transfer(address,uint256)",
             hlp, 
-            type(uint256).max
+            depositAmount 
+        );
+
+        hyperliquidData[1] = abi.encodeWithSignature(
+            "sendUsdClassTransfer(uint64,bool)",
+            depositAmount,
+            true
         );
         
         // Hyperliquid vault deposit
-        hyperliquidData[1] = abi.encodeWithSignature(
+        hyperliquidData[2] = abi.encodeWithSignature(
             "sendVaultTransfer(address,bool,uint64)",
-            hlp, // target
+            hlp, // vault
             true, // isDeposit
             depositAmount // amount
         );
         
-        // Try to get the current vault balance before deposit
-        uint256 vaultBalanceBefore = 0;
-        try IHyperliquidVault(l1Hyperliquid).getVaultBalance(address(manager)) returns (uint256 balance) {
-            vaultBalanceBefore = balance;
-        } catch {
-            console.logString("Failed to get current vault balance");
-        }
         
         // Execute transactions
         try manager.manageVaultWithMerkleVerification(
@@ -137,13 +140,6 @@ contract BtcCarryLeg3HyperliquidScript is BtcCarryBase {
         ) {
             console.logString("Hyperliquid deposit completed successfully");
             
-            // Try to get the updated vault balance
-            try IHyperliquidVault(l1Hyperliquid).getVaultBalance(address(manager)) returns (uint256 balance) {
-                console.logString("Increase in vault balance:");
-                console.logUint(balance - vaultBalanceBefore);
-            } catch {
-                console.logString("Failed to get updated vault balance");
-            }
         } catch (bytes memory errorData) {
             console.logString("Hyperliquid deposit error: ");
             logError(errorData);

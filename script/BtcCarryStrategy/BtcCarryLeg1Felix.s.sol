@@ -5,6 +5,10 @@ pragma solidity 0.8.21;
 import {BtcCarryBase} from "./BtcCarryBase.s.sol";
 import {console} from "forge-std/console.sol";
 import {ERC20} from "@solmate/tokens/ERC20.sol";
+import {IHintHelpers} from "src/interfaces/Liquity/IHintHelpers.sol";
+import {IBorrowerOperations} from "src/interfaces/Liquity/IBorrowerOperations.sol";
+import {IPriceFeedTestnet} from "src/interfaces/Liquity/TestInterfaces/IPriceFeedTestnet.sol";
+import {PriceFeedTestnet} from "src/interfaces/Liquity/TestInterfaces/PriceFeedTestnet.sol";
 
 /**
  * @title BtcCarryLeg1Felix
@@ -12,10 +16,10 @@ import {ERC20} from "@solmate/tokens/ERC20.sol";
  * @dev This script borrows feUSD using WBTC as collateral through the Felix protocol
  *
  * To run on testnet:
- * forge script script/BtcCarryStrategy/BtcCarryLeg1Felix.s.sol:BtcCarryLeg1FelixScript --rpc-url $RPC_URL --broadcast
+ * forge script script/BtcCarryStrategy/BtcCarryLeg1Felix.s.sol:BtcCarryLeg1FelixScript --rpc-url $RPC_URL --broadcast --skip-simulation --legacy
  *
  * To run on mainnet:
- * forge script script/BtcCarryStrategy/BtcCarryLeg1Felix.s.sol:BtcCarryLeg1FelixScript --rpc-url $MAINNET_RPC_URL --broadcast --verify
+ * forge script script/BtcCarryStrategy/BtcCarryLeg1Felix.s.sol:BtcCarryLeg1FelixScript --rpc-url $MAINNET_RPC_URL --broadcast --skip-simulation --legacy --verify
  */
 contract BtcCarryLeg1FelixScript is BtcCarryBase {
 
@@ -31,6 +35,46 @@ contract BtcCarryLeg1FelixScript is BtcCarryBase {
         loadDeployedContracts();
         setupStrategyParameters();
         setupMerkleProofs();
+
+        // Get upfront fee from hint helpers
+        address hintHelpers = getAddress(sourceChain, "hintHelpers");
+        try IHintHelpers(hintHelpers).predictOpenTroveUpfrontFee(
+            0, 
+            collAmount,
+            annualInterestRate
+        ) returns (uint256 fee) {
+            upfrontFee = fee;
+            console.logString("Predicted upfront fee for opening trove:");
+            console.logUint(upfrontFee);
+        } catch {
+            // Use a higher default fee if prediction fails
+            upfrontFee = 5000000; 
+            console.logString("Using default upfront fee:");
+            console.logUint(upfrontFee);
+        }
+
+        // Mock price feed
+        address priceFeedAddress = getAddress(sourceChain, "WBTC_priceFeed");
+        uint256 lastGoodPrice = 3761200000000000000000; // Use a known good price from previous runs
+        try IPriceFeedTestnet(priceFeedAddress).lastGoodPrice() returns (uint256 price) {
+            lastGoodPrice = price;
+            console.logString("Last good price:");
+            console.logUint(lastGoodPrice);
+        } catch {
+            console.logString("Failed to get lastGoodPrice");
+            console.logString("Using default price:");
+            console.logUint(lastGoodPrice);
+        }
+        
+        PriceFeedTestnet priceFeed = new PriceFeedTestnet();
+        vm.etch(priceFeedAddress, address(priceFeed).code);
+
+        try IPriceFeedTestnet(priceFeedAddress).setPrice(lastGoodPrice * 110 / 100) returns (bool /* success */) {
+            console.logString("Price feed set successfully");
+        } catch (bytes memory err) {
+            console.logString("Error setting price feed:");
+            console.logBytes(err);
+        }
     }
 
     function run() external {
@@ -44,8 +88,6 @@ contract BtcCarryLeg1FelixScript is BtcCarryBase {
         // Check if vault has sufficient WBTC balance
         uint256 wbtcBalance = wBTC.balanceOf(address(boringVault));
         if (wbtcBalance < collAmount) {
-            
-            // Ask user to confirm proceeding
             bool proceed = askUserToConfirm("Proceed with insufficient WBTC?");
             if (!proceed) {
                 console.log("Execution aborted by user");
@@ -73,7 +115,6 @@ contract BtcCarryLeg1FelixScript is BtcCarryBase {
         annualInterestRate = vm.envOr("ANNUAL_INTEREST_RATE", uint256(1e17)); // 10% default
         collAmount = vm.envOr("COLL_AMOUNT", uint256(1e18)); // 1 WBTC default
         boldAmount = vm.envOr("BOLD_AMOUNT", uint256(3000e18)); // 3000 feUSD default
-        upfrontFee = vm.envOr("UPFRONT_FEE", uint256(5000000)); // Default upfront fee
     }
 
     /**
@@ -126,7 +167,7 @@ contract BtcCarryLeg1FelixScript is BtcCarryBase {
             0,                        // _upperHint
             0,                        // _lowerHint
             annualInterestRate,       // _annualInterestRate
-            upfrontFee * 2,           // _maxUpfrontFee (higher than predicted)
+            type(uint256).max,        // _maxUpfrontFee (higher than predicted)
             address(boringVault),     // _addManager
             address(boringVault),     // _removeManager
             address(boringVault)      // _receiver

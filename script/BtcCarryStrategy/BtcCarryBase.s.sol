@@ -85,7 +85,7 @@ contract BtcCarryBase is Script, MerkleTreeHelper {
         _addFelixLeafs(leafs);
         _addHyperliquidLeafs(leafs);
         
-        uint8 feUSDApprovalIndex = 19; 
+        uint8 feUSDApprovalIndex = 20; 
         leafs[feUSDApprovalIndex] = ManageLeaf(
             getAddress(sourceChain, "feUSD"), 
             false, 
@@ -96,7 +96,7 @@ contract BtcCarryBase is Script, MerkleTreeHelper {
         );
         leafs[feUSDApprovalIndex].argumentAddresses[0] = getAddress(sourceChain, "curveUsdcFeUSDPool");
         
-        uint8 curveSwapIndex = 20; 
+        uint8 curveSwapIndex = 21; 
         leafs[curveSwapIndex] = ManageLeaf(
             getAddress(sourceChain, "curveUsdcFeUSDPool"), 
             false, 
@@ -121,19 +121,20 @@ contract BtcCarryBase is Script, MerkleTreeHelper {
         }
 
         // Choose the specific leafs we want to use 
-        ManageLeaf[] memory manageLeafs = new ManageLeaf[](7);
+        ManageLeaf[] memory manageLeafs = new ManageLeaf[](8);
         manageLeafs[0] = leafs[0]; // WBTC approval
         manageLeafs[1] = leafs[1]; // WHYPE approval
         manageLeafs[2] = leafs[2]; // openTrove
-        manageLeafs[3] = leafs[12]; // hlp approve       
-        manageLeafs[4] = leafs[13]; // hlp deposit
-        manageLeafs[5] = leafs[feUSDApprovalIndex]; // feUSD approval for Curve
-        manageLeafs[6] = leafs[curveSwapIndex]; // Curve swap (feUSD to USDC)
+        manageLeafs[3] = leafs[12]; // hlp transfer       
+        manageLeafs[4] = leafs[19]; // hlp class transfer
+        manageLeafs[5] = leafs[13]; // hlp deposit
+        manageLeafs[6] = leafs[feUSDApprovalIndex]; // feUSD approval for Curve
+        manageLeafs[7] = leafs[curveSwapIndex]; // Curve swap (feUSD to USDC)
         
         manageProofs = _getProofsUsingTree(manageLeafs, merkleTree);
         console.logString("manageProofs generated");
 
-        targets = new address[](7);
+        targets = new address[](8);
         targets[0] = manageLeafs[0].target;
         targets[1] = manageLeafs[1].target;
         targets[2] = manageLeafs[2].target;
@@ -141,8 +142,9 @@ contract BtcCarryBase is Script, MerkleTreeHelper {
         targets[4] = manageLeafs[4].target;
         targets[5] = manageLeafs[5].target;
         targets[6] = manageLeafs[6].target;
+        targets[7] = manageLeafs[7].target;
 
-        targetData = new bytes[](7);
+        targetData = new bytes[](8);
         targetData[0] = abi.encodeWithSignature(
             "approve(address,uint256)", 
             getAddress(sourceChain, "WBTC_borrowerOperations"), 
@@ -157,7 +159,7 @@ contract BtcCarryBase is Script, MerkleTreeHelper {
         );
 
         // Use exact decoders from the leafs 
-        decodersAndSanitizers = new address[](7);
+        decodersAndSanitizers = new address[](8);
         decodersAndSanitizers[0] = manageLeafs[0].decoderAndSanitizer;
         decodersAndSanitizers[1] = manageLeafs[1].decoderAndSanitizer;
         decodersAndSanitizers[2] = manageLeafs[2].decoderAndSanitizer;
@@ -165,15 +167,17 @@ contract BtcCarryBase is Script, MerkleTreeHelper {
         decodersAndSanitizers[4] = manageLeafs[4].decoderAndSanitizer;
         decodersAndSanitizers[5] = manageLeafs[5].decoderAndSanitizer;
         decodersAndSanitizers[6] = manageLeafs[6].decoderAndSanitizer;
+        decodersAndSanitizers[7] = manageLeafs[7].decoderAndSanitizer;
 
-        valueAmounts = new uint256[](7);
+        valueAmounts = new uint256[](8);
         valueAmounts[0] = manageLeafs[0].canSendValue ? 1 : 0; // WBTC approval
         valueAmounts[1] = manageLeafs[1].canSendValue ? 1 : 0; // WHYPE approval
         valueAmounts[2] = manageLeafs[2].canSendValue ? 1 : 0; // openTrove
-        valueAmounts[3] = manageLeafs[3].canSendValue ? 1 : 0; // hlp approve
-        valueAmounts[4] = manageLeafs[4].canSendValue ? 1 : 0; // hlp deposit
-        valueAmounts[5] = manageLeafs[5].canSendValue ? 1 : 0; // feUSD approval
-        valueAmounts[6] = manageLeafs[6].canSendValue ? 1 : 0; // Curve swap
+        valueAmounts[3] = manageLeafs[3].canSendValue ? 1 : 0; // hlp transfer
+        valueAmounts[4] = manageLeafs[4].canSendValue ? 1 : 0; // hlp class transfer
+        valueAmounts[5] = manageLeafs[5].canSendValue ? 1 : 0; // hlp deposit
+        valueAmounts[6] = manageLeafs[6].canSendValue ? 1 : 0; // feUSD approval
+        valueAmounts[7] = manageLeafs[7].canSendValue ? 1 : 0; // Curve swap
     }
 
     /**
