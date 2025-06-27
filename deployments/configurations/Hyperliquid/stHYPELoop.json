@@ -6,10 +6,10 @@
     "evmVersion": "shanghai",
     "desiredNumberOfDeploymentTxs": 2000,
     "txBundlerAddressOrName": {
-      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
+      "address": "0x7abBebC5B945A28a071aEdcd79C86D294F894e49",
       "name": "txBundlerAddress"
     },
-    "setupRoles": true,
+    "setupRoles": true, 
     "setupTestUser": true,
     "saveDeploymentDetails": true,
     "testUserAddressOrName": {
@@ -17,7 +17,7 @@
       "name": "dev1Address"
     },
     "deployerContractAddressOrName": {
-      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
+      "address": "0x7abBebC5B945A28a071aEdcd79C86D294F894e49",
       "name": "deployerAddress"
     },
     "nativeWrapperAddressOrName": {
@@ -25,13 +25,17 @@
       "name": "WHYPE"
     },
     "deploymentOwnerAddressOrName": {
-      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
+      "address": "0x5FB7587be4c51E56163e4A2ee1E9393DC2d1a361",
       "name": "txBundlerAddress"
     },
     "deploymentFileName": "addresses/Hyperliquid/stHYPELoopingVault.json"
   },
   "rolesAuthorityConfiguration": {
-    "rolesAuthorityDeploymentName": "stHYPE Looping Roles Authority V0.1"
+    "rolesAuthorityDeploymentName": "stHYPE Looping Roles Authority V0.1",
+    "rolesAuthorityAddressOrName": {
+      "address": "0x93a01C5c31C7065553A620f9776B4BeAf8708e9B",
+      "name": "rolesAuthority"
+    }
   },
   "lensConfiguration": {
     "lensDeploymentName": "stHYPE Looping Lens V0.1"
@@ -65,8 +69,8 @@
         "allowedExchangeRateChangeLower": 9900,
         "allowedExchangeRateChangeUpper": 10100,
         "baseAddressOrName": {
-          "address": "0xHYPE_ADDRESS_HERE",
-          "name": "HYPE"
+          "address": "0x5555555555555555555555555555555555555555",
+          "name": "wHYPE"
         },
         "minimumUpateDelayInSeconds": 3600,
         "performanceFee": 1000,
@@ -126,17 +130,25 @@
   "accountantAssets": [
     {
       "addressOrName": {
-        "address": "0xstHYPE_ADDRESS_HERE",
+        "address": "0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616",
         "name": "stHYPE"
       },
       "isPeggedToBase": true,
+      "rateProvider": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "addressOrName": {
+        "address": "0x5555555555555555555555555555555555555555",
+        "name": "wHYPE"
+      },
+      "isPeggedToBase": false,
       "rateProvider": "0x0000000000000000000000000000000000000000"
     }
   ],
   "depositAssets": [
     {
       "addressOrName": {
-        "address": "0xWHYPE_ADDRESS_HERE",
+        "address": "0x5555555555555555555555555555555555555555",
         "name": "wHYPE"
       },
       "allowDeposits": true,
@@ -147,7 +159,7 @@
   "withdrawAssets": [
     {
       "addressOrName": {
-        "address": "0xWHYPE_ADDRESS_HERE",
+        "address": "0x5555555555555555555555555555555555555555",
         "name": "wHYPE"
       },
       "maxDiscount": 100,

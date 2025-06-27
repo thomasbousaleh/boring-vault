@@ -23,9 +23,8 @@ contract DeployDeployerScript is Script, ContractNames, Test {
     Deployer public deployer;
 
     //address public deployerAddress = 0x5F2F11ad8656439d5C14d9B351f8b09cDaC2A02d;
-    address public deployerAddress = 0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95;
     //address public dev0Address = 0x0463E60C7cE10e57911AB7bD1667eaa21de3e79b;
-    address public dev0Address = 0xDd00059904ddF45e30b4131345957f76F26b8f6c;
+    address public dev0Address = 0x5FB7587be4c51E56163e4A2ee1E9393DC2d1a361;
     address public dev1Address = 0xDd00059904ddF45e30b4131345957f76F26b8f6c;
     address public dev2Address = 0xDd00059904ddF45e30b4131345957f76F26b8f6c;
     address public dev3Address = 0xDd00059904ddF45e30b4131345957f76F26b8f6c;
@@ -46,22 +45,26 @@ contract DeployDeployerScript is Script, ContractNames, Test {
 
         console.log("DEPLOYER ADDRESS", address(deployer));
 
-        require(address(deployer) == deployerAddress, "Deployer address mismatch");
+        // require(address(deployer) == deployerAddress, "Deployer address mismatch");
         creationCode = type(RolesAuthority).creationCode;
         constructorArgs = abi.encode(dev0Address, address(0));
         rolesAuthority = RolesAuthority(
             deployer.deployContract("Seven Seas RolesAuthority Version 0.1", creationCode, constructorArgs, 0)
         );
 
-        deployer.setAuthority(rolesAuthority);
-
         rolesAuthority.setRoleCapability(DEPLOYER_ROLE, address(deployer), Deployer.deployContract.selector, true);
         rolesAuthority.setRoleCapability(DEPLOYER_ROLE, address(deployer), Deployer.bundleTxs.selector, true);
+        rolesAuthority.setRoleCapability(DEPLOYER_ROLE, address(rolesAuthority), rolesAuthority.setRoleCapability.selector, true);
         rolesAuthority.setUserRole(dev0Address, DEPLOYER_ROLE, true);
         rolesAuthority.setUserRole(dev1Address, DEPLOYER_ROLE, true);
         rolesAuthority.setUserRole(dev2Address, DEPLOYER_ROLE, true);
         rolesAuthority.setUserRole(dev3Address, DEPLOYER_ROLE, true);
         rolesAuthority.setUserRole(address(deployer), DEPLOYER_ROLE, true);
+
+        deployer.setAuthority(rolesAuthority);
+
+        console.log("Assigned DEPLOYER_ROLE to:", address(deployer));
+        console.log("Authority set to:", address(rolesAuthority));
 
         // deployer = Deployer(deployerAddress);
 
