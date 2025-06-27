@@ -1,0 +1,160 @@
+{
+  "deploymentParameters": {
+    "logLevel": 4,
+    "privateKeyEnvName": "BORING_DEVELOPER",
+    "chainName": "hyperliquid",
+    "evmVersion": "shanghai",
+    "desiredNumberOfDeploymentTxs": 2000,
+    "txBundlerAddressOrName": {
+      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
+      "name": "txBundlerAddress"
+    },
+    "setupRoles": true,
+    "setupTestUser": true,
+    "saveDeploymentDetails": true,
+    "testUserAddressOrName": {
+      "address": "0xDd00059904ddF45e30b4131345957f76F26b8f6c",
+      "name": "dev1Address"
+    },
+    "deployerContractAddressOrName": {
+      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
+      "name": "deployerAddress"
+    },
+    "nativeWrapperAddressOrName": {
+      "address": "0x5555555555555555555555555555555555555555",
+      "name": "WHYPE"
+    },
+    "deploymentOwnerAddressOrName": {
+      "address": "0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95",
+      "name": "txBundlerAddress"
+    },
+    "deploymentFileName": "addresses/Hyperliquid/stHYPELoopingVault.json"
+  },
+  "rolesAuthorityConfiguration": {
+    "rolesAuthorityDeploymentName": "stHYPE Looping Roles Authority V0.1"
+  },
+  "lensConfiguration": {
+    "lensDeploymentName": "stHYPE Looping Lens V0.1"
+  },
+  "boringVaultConfiguration": {
+    "boringVaultDeploymentName": "stHYPE Looping Vault V0.1",
+    "boringVaultName": "stHYPE Loop Vault",
+    "boringVaultSymbol": "SLV",
+    "boringVaultDecimals": 18
+  },
+  "managerConfiguration": {
+    "managerDeploymentName": "stHYPE Looping Manager V0.1",
+    "balancerVaultAddressOrName": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "name": "vault"
+    }
+  },
+  "accountantConfiguration": {
+    "accountantDeploymentName": "stHYPE Looping Accountant V0.1",
+    "accountantParameters": {
+      "kind": {
+        "variableRate": true,
+        "fixedRate": false
+      },
+      "payoutConfiguration": {
+        "payoutTo": "0x0000000000000000000000000000000000000000",
+        "optionalPaymentSplitterName": "stHYPE Looping Payment Splitter V0.1",
+        "splits": []
+      },
+      "accountantDeploymentParameters": {
+        "allowedExchangeRateChangeLower": 9900,
+        "allowedExchangeRateChangeUpper": 10100,
+        "baseAddressOrName": {
+          "address": "0xHYPE_ADDRESS_HERE",
+          "name": "HYPE"
+        },
+        "minimumUpateDelayInSeconds": 3600,
+        "performanceFee": 1000,
+        "platformFee": 500,
+        "startingExchangeRate": 1000000
+      }
+    }
+  },
+  "tellerConfiguration": {
+    "tellerDeploymentName": "stHYPE Looping Teller V0.1",
+    "tellerParameters": {
+      "allowPublicDeposits": true,
+      "shareLockPeriod": 60,
+      "kind": {
+        "teller": true,
+        "tellerWithRemediation": false,
+        "tellerWithCcip": false,
+        "tellerWithLayerZero": false
+      }
+    }
+  },
+  "boringQueueConfiguration": {
+    "boringQueueDeploymentName": "stHYPE Looping Queue V0.1",
+    "boringQueueSolverName": "stHYPE Looping Solver V0.1",
+    "queueParameters": {
+      "allowPublicWithdrawals": true,
+      "allowPublicSelfWithdrawals": true,
+      "kind": {
+        "boringQueue": true,
+        "boringQueueWithTracking": false
+      }
+    }
+  },
+  "droneConfiguration": {
+    "droneDeploymentBaseName": "stHYPE Looping Drone V0.1",
+    "droneCount": 0,
+    "safeGasToForwardNative": 21000
+  },
+  "pauserConfiguration": {
+    "shouldDeploy": false,
+    "pauserDeploymentName": "stHYPE Looping Pauser V0.1",
+    "makeGenericPauser": [],
+    "makeGenericUnpauser": [],
+    "makePauseAll": [],
+    "makeUnpauseAll": [],
+    "senderToPausable": []
+  },
+  "timelockConfiguration": {
+    "shouldDeploy": false,
+    "timelockDeploymentName": "stHYPE Looping Timelock V0.1",
+    "timelockParameters": {
+      "minDelay": 86400,
+      "proposers": [],
+      "executors": []
+    }
+  },
+  "accountantAssets": [
+    {
+      "addressOrName": {
+        "address": "0xstHYPE_ADDRESS_HERE",
+        "name": "stHYPE"
+      },
+      "isPeggedToBase": true,
+      "rateProvider": "0x0000000000000000000000000000000000000000"
+    }
+  ],
+  "depositAssets": [
+    {
+      "addressOrName": {
+        "address": "0xWHYPE_ADDRESS_HERE",
+        "name": "wHYPE"
+      },
+      "allowDeposits": true,
+      "allowWithdraws": true,
+      "sharePremium": 0
+    }
+  ],
+  "withdrawAssets": [
+    {
+      "addressOrName": {
+        "address": "0xWHYPE_ADDRESS_HERE",
+        "name": "wHYPE"
+      },
+      "maxDiscount": 100,
+      "minDiscount": 0,
+      "minimumSecondsToDeadline": 3600,
+      "minimumShares": 0,
+      "secondsToMaturity": 60
+    }
+  ]
+}
