@@ -53,17 +53,18 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
     // Load deployed contracts
     function loadDeployedContracts() internal {
         // Load addresses of deployed contracts
-        address managerAddress = 0x37a76F45f76DDd5E512533975Aa12ABB352b4e04;
-        address boringVaultAddress = 0x486367D6aBEe6dB736aa193d9e3B3cd94b865B76;
-        address rolesAuthorityAddress = 0x01415E10bEDe2dEC8e60D3a1Ea741C41ceaF3E2a;
+        address managerAddress = 0xD6b06Ad4F092Bc40B0Df7F9ad7779E7E9E56C87b;
+        address boringVaultAddress = 0xD204A0093EE4BfD7A84Ec052777350bbd1Db92e0;
+        address rolesAuthorityAddress = 0x3d44ab06B4C35080dCb44F3EF18ffEa98192fE97;
         
         manager = ManagerWithMerkleVerification(managerAddress);
         boringVault = BoringVault(payable(boringVaultAddress));
         rolesAuthority = RolesAuthority(rolesAuthorityAddress);
-        rawDataDecoderAndSanitizer = 0x831D9337Eb3926A3C1869145C967E3B9Ec4d24A0;
+        rawDataDecoderAndSanitizer = 0x010e148d8EAEad41559F1677e8abf50Fdb8b4C00;
         setAddress(true, sourceChain, "boringVault", boringVaultAddress);
         setAddress(true, sourceChain, "rolesAuthority", rolesAuthorityAddress);
         setAddress(true, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
+        setAddress(true, "hyperliquid", "Overseer", 0x371de8EBDA2ebB627a4f6d92bD6d01eC385A309b);
     }
     
     // Helper functions for generating merkle proofs
@@ -77,12 +78,32 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         // Generate the usual leafs without modifying anything
         _addFelixLeafs(leafs);
         _addHyperliquidLeafs(leafs);
+
+        // Add StHYPE mint leaf
+        uint8 sthypeMintIndex = 22;
+        leafs[sthypeMintIndex] = ManageLeaf(
+            getAddress(sourceChain, "Overseer"), // target
+            true,                                // canSendValue
+            "mint(address,string)",              // function signature
+            new address[](0),                    // argumentAddresses
+            "Stake HYPE into stHYPE via Overseer", // description
+            0x010e148d8EAEad41559F1677e8abf50Fdb8b4C00 // deployed decoder
+        );
         
         console.logString("leafs generated");
         
         // Generate the merkle tree 
         bytes32[][] memory merkleTree = _generateMerkleTree(leafs);
-        
+
+        /*
+        for (uint256 level = 0; level < merkleTree.length; level++) {
+            for (uint256 i = 0; i < merkleTree[level].length; i++) {
+            console.log("Tree[%s][%s]:", level, i);
+            console.logBytes32(merkleTree[level][i]);
+                }
+        }
+        */
+
         console.log("Manager address:", address(manager));
         console.log("Signer:", vm.addr(getPrivateKey()));
 
@@ -96,55 +117,24 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         }
 
         // Choose the specific leafs we want to use 
-        ManageLeaf[] memory manageLeafs = new ManageLeaf[](8);
-        manageLeafs[0] = leafs[0]; // WBTC approval
-        manageLeafs[1] = leafs[1]; // WHYPE approval
-        manageLeafs[2] = leafs[2]; // openTrove
-        manageLeafs[3] = leafs[12]; // hlp transfer       
-        manageLeafs[4] = leafs[19]; // hlp class transfer
-        manageLeafs[5] = leafs[13]; // hlp deposit
-        
+        ManageLeaf[] memory manageLeafs = new ManageLeaf[](1);
+        manageLeafs[0] = leafs[sthypeMintIndex];
+
         manageProofs = _getProofsUsingTree(manageLeafs, merkleTree);
         console.logString("manageProofs generated");
 
-        targets = new address[](8);
+        targets = new address[](1);
         targets[0] = manageLeafs[0].target;
-        targets[1] = manageLeafs[1].target;
-        targets[2] = manageLeafs[2].target;
-        targets[3] = manageLeafs[3].target;
-        targets[4] = manageLeafs[4].target;
-        targets[5] = manageLeafs[5].target;
 
-        targetData = new bytes[](8);
-        targetData[0] = abi.encodeWithSignature(
-            "approve(address,uint256)", 
-            getAddress(sourceChain, "WBTC_borrowerOperations"), 
-            type(uint256).max
-        );
-        
-        // Add WHYPE approval
-        targetData[1] = abi.encodeWithSignature(
-            "approve(address,uint256)", 
-            getAddress(sourceChain, "WBTC_borrowerOperations"), 
-            type(uint256).max
-        );
+        targetData = new bytes[](1);
+        targetData[0] = abi.encodeWithSignature("mint(address,string)", vm.addr(getPrivateKey()), "stHYPE");
 
         // Use exact decoders from the leafs 
-        decodersAndSanitizers = new address[](8);
+        decodersAndSanitizers = new address[](1);
         decodersAndSanitizers[0] = manageLeafs[0].decoderAndSanitizer;
-        decodersAndSanitizers[1] = manageLeafs[1].decoderAndSanitizer;
-        decodersAndSanitizers[2] = manageLeafs[2].decoderAndSanitizer;
-        decodersAndSanitizers[3] = manageLeafs[3].decoderAndSanitizer;
-        decodersAndSanitizers[4] = manageLeafs[4].decoderAndSanitizer;
-        decodersAndSanitizers[5] = manageLeafs[5].decoderAndSanitizer;
 
-        valueAmounts = new uint256[](8);
-        valueAmounts[0] = manageLeafs[0].canSendValue ? 1 : 0; // WBTC approval
-        valueAmounts[1] = manageLeafs[1].canSendValue ? 1 : 0; // WHYPE approval
-        valueAmounts[2] = manageLeafs[2].canSendValue ? 1 : 0; // openTrove
-        valueAmounts[3] = manageLeafs[3].canSendValue ? 1 : 0; // hlp transfer
-        valueAmounts[4] = manageLeafs[4].canSendValue ? 1 : 0; // hlp class transfer
-        valueAmounts[5] = manageLeafs[5].canSendValue ? 1 : 0; // hlp deposit
+        valueAmounts = new uint256[](1);
+        valueAmounts[0] = manageLeafs[0].canSendValue ? 1 : 0;
     }
 
     /**

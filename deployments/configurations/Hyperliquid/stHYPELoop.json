@@ -6,18 +6,18 @@
     "evmVersion": "shanghai",
     "desiredNumberOfDeploymentTxs": 1,
     "txBundlerAddressOrName": {
-      "address": "0x371141254a5e0a8b6d59AC85CB610B4e3CDdfDE9",
+      "address": "0x12afE7fc906f8CeBc14df974A86cc4dc1a732D26",
       "name": "txBundlerAddress"
     },
     "setupRoles": true, 
     "setupTestUser": true,
     "saveDeploymentDetails": true,
     "testUserAddressOrName": {
-      "address": "0xDd00059904ddF45e30b4131345957f76F26b8f6c",
+      "address": "0x5FB7587be4c51E56163e4A2ee1E9393DC2d1a361",
       "name": "dev1Address"
     },
     "deployerContractAddressOrName": {
-      "address": "0x371141254a5e0a8b6d59AC85CB610B4e3CDdfDE9",
+      "address": "0x12afE7fc906f8CeBc14df974A86cc4dc1a732D26",
       "name": "deployerAddress"
     },
     "nativeWrapperAddressOrName": {
@@ -25,7 +25,7 @@
       "name": "WHYPE"
     },
     "deploymentOwnerAddressOrName": {
-      "address": "0x371141254a5e0a8b6d59AC85CB610B4e3CDdfDE9",
+      "address": "0x12afE7fc906f8CeBc14df974A86cc4dc1a732D26",
       "name": "txBundlerAddress"
     },
     "deploymentFileName": "addresses/Hyperliquid/stHYPELoopingVault.json"
@@ -33,7 +33,7 @@
   "rolesAuthorityConfiguration": {
     "rolesAuthorityDeploymentName": "stHYPE Looping Roles Authority V0.1",
     "rolesAuthorityAddressOrName": {
-      "address": "0xbFa2b7F3C8BE6D4D254F3D54855490d713bD5201",
+      "address": "0x4Bd8F0554a21cE2A493C9f59F66382C2DfB2300E",
       "name": "rolesAuthority"
     }
   },

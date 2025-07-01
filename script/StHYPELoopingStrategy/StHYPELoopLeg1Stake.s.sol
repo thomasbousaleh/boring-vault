@@ -36,18 +36,58 @@ contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
     }
 
     function run() external {
-        IOverseer overseer = IOverseer(getAddress(sourceChain, "Overseer")); // Get contract
+        console.log("Starting StHype Loop Strategy - Leg 1 (Stake)");
 
-        address user = address(this); // or another recipient
-        string memory validatorCode = ""; // or use "" if none
+        uint256 pk = getPrivateKey();
 
-        // Ensure this contract has WHYPE balance (ETH) — WHYPE is native ETH
+        IOverseer overseer = IOverseer(getAddress(sourceChain, "Overseer"));
+        string memory validatorCode = "stHYPE";   // MUST match the leaf
         uint256 hypeToStake = 1;
 
-        // Stake into stHYPE
-        uint256 stHypeMinted = overseer.mint{value: hypeToStake}(user, validatorCode);
+        // Suppose manageProofs is a bytes32[] in storage, with N proofs:
+        uint256 N = manageProofs.length;
 
-        console.log("Minted stHYPE:", stHypeMinted);
+        // 1) Allocate all your memory arrays to length N
+        bytes32[][] memory stakeProofs = new bytes32[][](N);
+        address[] memory  targets    = new address[](N);
+        bytes[]   memory  payloads   = new bytes[](N);
+        address[] memory  decoders   = new address[](N);
+        uint256[] memory  values     = new uint256[](N);
+
+        // 2) Loop to populate them
+        for (uint256 i = 0; i < N; i++) {
+            stakeProofs[i] = manageProofs[i];         // the i-th Merkle proof
+            targets[i]     = address(overseer);       // or whatever varies per call
+            payloads[i]    = abi.encodeWithSignature(
+                                "mint(address,string)",
+                                vm.addr(pk),
+                                validatorCode
+                            );
+            decoders[i]    = address(0x010e148d8EAEad41559F1677e8abf50Fdb8b4C00);              // if you don’t need a decoder
+            values[i]      = hypeToStake;             // same stake each time, or vary
+        }
+
+        console.logString("decoders[0] ="); console.logAddress(decoders[0]);
+        console.logString("targets[0]  ="); console.logAddress(targets[0]);
+
+        vm.startBroadcast(pk);
+
+        try manager.manageVaultWithMerkleVerification(
+            stakeProofs,
+            decoders,
+            targets,
+            payloads,
+            values
+        ) {
+            // success
+            console.logString("Staked HYPE to stHYPE successfully");
+        } catch (bytes memory err) {
+            // failure
+            console.logString("Stake via manager failed:");
+            logError(err);
+        }
+
+        vm.stopBroadcast();
     }
 
     /**

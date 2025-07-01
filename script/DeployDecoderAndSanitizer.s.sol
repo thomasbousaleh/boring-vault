@@ -28,7 +28,8 @@ import {SonicMainnetDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/So
 import {AaveV3FullDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/AaveV3FullDecoderAndSanitizer.sol"; 
 import {LombardBtcDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/LombardBtcDecoderAndSanitizer.sol"; 
 import {StakedSonicUSDDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/StakedSonicUSDDecoderAndSanitizer.sol"; 
-import {BtcCarryDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/BtcCarryDecoderAndSanitizer.sol"; 
+import {BtcCarryDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/BtcCarryDecoderAndSanitizer.sol";
+import {StHYPELoopDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/StHYPELoopDecoderAndSanitizer.sol";
 
 import {BoringDrone} from "src/base/Drones/BoringDrone.sol";
 
@@ -42,7 +43,7 @@ import "forge-std/console.sol";
 
 contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddresses, MerkleTreeHelper {
     uint256 public privateKey;
-    Deployer public deployer = Deployer(0x7F17aD4CE3680e5363599fa6B1a0019fd9Fa4f95);
+    Deployer public deployer = Deployer(0x12afE7fc906f8CeBc14df974A86cc4dc1a732D26);
 
     function setUp() external {
         privateKey = vm.envUint("BORING_DEVELOPER");
@@ -126,11 +127,17 @@ contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddres
         // constructorArgs = abi.encode(univ3); 
         // deployer.deployContract("Staked Sonic USD Decoder And Sanitizer V0.2", creationCode, constructorArgs, 0);
 
-        creationCode = type(BtcCarryDecoderAndSanitizer).creationCode;
+        // creationCode = type(BtcCarryDecoderAndSanitizer).creationCode;
+        // constructorArgs = hex""; 
+        // address btcCarry = deployer.deployContract("BTC Carry Decoder And Sanitizer V0.0", creationCode, constructorArgs, 0);
+        // console.logString("BTC Carry Decoder And Sanitizer V0.0 deployed at");
+        // console.logAddress(btcCarry);
+
+        creationCode = type(StHYPELoopDecoderAndSanitizer).creationCode;
         constructorArgs = hex""; 
-        address btcCarry = deployer.deployContract("BTC Carry Decoder And Sanitizer V0.0", creationCode, constructorArgs, 0);
-        console.logString("BTC Carry Decoder And Sanitizer V0.0 deployed at");
-        console.logAddress(btcCarry);
+        address sthypeDecoder = deployer.deployContract("StHYPELoop Decoder And Sanitizer V0.3", creationCode, constructorArgs, 0);
+        console.logString("StHYPELoopDecoderAndSanitizer deployed at");
+        console.logAddress(sthypeDecoder);
 
         vm.stopBroadcast();
     }
