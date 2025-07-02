@@ -135,7 +135,7 @@ contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddres
 
         creationCode = type(StHYPELoopDecoderAndSanitizer).creationCode;
         constructorArgs = hex""; 
-        address sthypeDecoder = deployer.deployContract("StHYPELoop Decoder And Sanitizer V0.4", creationCode, constructorArgs, 0);
+        address sthypeDecoder = deployer.deployContract("StHYPELoop Decoder And Sanitizer V0.5", creationCode, constructorArgs, 0);
         console.logString("StHYPELoopDecoderAndSanitizer deployed at");
         console.logAddress(sthypeDecoder);
 

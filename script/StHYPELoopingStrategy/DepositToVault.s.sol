@@ -13,16 +13,16 @@ interface IWHYPE {
 }
 
 contract DepositToVault is Script {
-    address constant tellerAddress = 0xd6CafdEE0Ef7211d49f4D1cD7cb560974026c11A;
+    address constant tellerAddress = 0xb663abA1ECB1654B964c28f03f4f020Fe585665b;
     address constant W_HYPE = 0x5555555555555555555555555555555555555555;
-    address constant vaultAddress = 0x08eEBA35974899Fd4439e65D8865EF88729F8a71;
+    address constant vaultAddress = 0xD204A0093EE4BfD7A84Ec052777350bbd1Db92e0;
 
     function run() external {
         uint256 privateKey = vm.envUint("BORING_DEVELOPER");
         address sender = vm.addr(privateKey);
         vm.startBroadcast(privateKey);
 
-        uint256 depositAmount = 1;
+        uint256 depositAmount = 1e17;
 
         // Load contracts
         TellerWithMultiAssetSupport teller = TellerWithMultiAssetSupport(tellerAddress);

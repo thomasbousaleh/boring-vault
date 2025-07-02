@@ -61,7 +61,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         manager = ManagerWithMerkleVerification(managerAddress);
         boringVault = BoringVault(payable(boringVaultAddress));
         rolesAuthority = RolesAuthority(rolesAuthorityAddress);
-        rawDataDecoderAndSanitizer = 0xa745Bb22327B13344Dc3E8786e18243940A59bb4;
+        rawDataDecoderAndSanitizer = 0x99b94904512Afa62515F196cdE25E64d07948F26;
         setAddress(true, sourceChain, "boringVault", boringVaultAddress);
         setAddress(true, sourceChain, "rolesAuthority", rolesAuthorityAddress);
         setAddress(true, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
@@ -92,12 +92,13 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         );
 
         uint256 unwrapAmount = ERC20(getAddress(sourceChain, "wHYPE")).balanceOf(address(boringVault));
+        console.log("Unwrap amount:", unwrapAmount);
 
         uint8 sthypeMintIndex = 23;
         leafs[sthypeMintIndex] = ManageLeaf(
             getAddress(sourceChain, "Overseer"), // target
             true,                                // canSendValue
-            "mint(address,string)",              // function signature
+            "mint(address)",              // function signature
             new address[](1),                    // argumentAddresses
             "Stake HYPE into stHYPE via Overseer", // description
             rawDataDecoderAndSanitizer // deployed decoder
@@ -145,7 +146,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
 
         targetData = new bytes[](2);
         targetData[0] = abi.encodeWithSignature("withdraw(uint256)", unwrapAmount);
-        targetData[1] = abi.encodeWithSignature("mint(address,string)", address(boringVault), "stHYPE");
+        targetData[1] = abi.encodeWithSignature("mint(address)", address(boringVault));
 
         // Use exact decoders from the leafs 
         decodersAndSanitizers = new address[](2);

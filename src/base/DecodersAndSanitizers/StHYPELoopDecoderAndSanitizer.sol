@@ -21,15 +21,6 @@ contract StHYPELoopDecoderAndSanitizer is BaseDecoderAndSanitizer, ICallDataSani
     /// @dev For StHYPE Loop we don’t need to mutate or inspect calldata,
     ///      so we simply echo it back unchanged.
     // Add anywhere inside the contract
-    function mint(address to, string calldata)
-        external
-        pure
-        returns (bytes memory addressesFound)
-    {
-        // Return the address the call touches so the manager can whitelist it
-        addressesFound = abi.encodePacked(to);
-    }
-    
     function sanitize(bytes calldata data)
         external
         pure
@@ -41,6 +32,14 @@ contract StHYPELoopDecoderAndSanitizer is BaseDecoderAndSanitizer, ICallDataSani
 
     function withdraw(uint256) external pure returns (bytes memory) {
         return abi.encodePacked(); // No address to whitelist, but needed for Manager compatibility
+    }
+
+    function mint(address to)
+        external
+        pure
+        returns (bytes memory addressesFound)
+    {
+        addressesFound = abi.encodePacked(to);
     }
 
     /* ─────────────────────────────────────── BTC-Carry helper enums ──────────────────────────────────── */
