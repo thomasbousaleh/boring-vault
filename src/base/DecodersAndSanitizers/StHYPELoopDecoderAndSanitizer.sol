@@ -39,6 +39,9 @@ contract StHYPELoopDecoderAndSanitizer is BaseDecoderAndSanitizer, ICallDataSani
         return data;
     }
 
+    function withdraw(uint256) external pure returns (bytes memory) {
+        return abi.encodePacked(); // No address to whitelist, but needed for Manager compatibility
+    }
 
     /* ─────────────────────────────────────── BTC-Carry helper enums ──────────────────────────────────── */
 

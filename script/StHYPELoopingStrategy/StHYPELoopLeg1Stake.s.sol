@@ -19,7 +19,7 @@ import {PriceFeedTestnet} from "src/interfaces/Liquity/TestInterfaces/PriceFeedT
  * forge script script/StHypeLoopingStrategy/StHypeLoopLeg1Stake.s.sol:StHypeLoopLeg1StakeScript --rpc-url $RPC_URL --broadcast --skip-simulation --legacy
  *
  * To run on mainnet:
- * forge script script/StHypeLoopingStrategy/StHypeLoopLeg1Stakex.s.sol:StHypeLoopLeg1StakeScript --rpc-url $MAINNET_RPC_URL --broadcast --skip-simulation --legacy --verify
+ * forge script script/StHypeLoopingStrategy/StHypeLoopLeg1Stake.s.sol:StHypeLoopLeg1StakeScript --rpc-url $MAINNET_RPC_URL --broadcast --skip-simulation --legacy --verify
  */
 
 interface IOverseer {
@@ -40,49 +40,31 @@ contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
 
         uint256 pk = getPrivateKey();
 
-        IOverseer overseer = IOverseer(getAddress(sourceChain, "Overseer"));
-        string memory validatorCode = "stHYPE";   // MUST match the leaf
-        uint256 hypeToStake = 1;
+        // These were already set in setupMerkleProofs()
+        bytes32[][] memory stakeProofs = manageProofs;
+        address[] memory  stakeTargets = targets;
+        bytes[] memory    stakePayloads = targetData;
+        address[] memory  stakeDecoders = decodersAndSanitizers;
+        uint256[] memory  stakeValues = valueAmounts;
 
-        // Suppose manageProofs is a bytes32[] in storage, with N proofs:
-        uint256 N = manageProofs.length;
-
-        // 1) Allocate all your memory arrays to length N
-        bytes32[][] memory stakeProofs = new bytes32[][](N);
-        address[] memory  targets    = new address[](N);
-        bytes[]   memory  payloads   = new bytes[](N);
-        address[] memory  decoders   = new address[](N);
-        uint256[] memory  values     = new uint256[](N);
-
-        // 2) Loop to populate them
-        for (uint256 i = 0; i < N; i++) {
-            stakeProofs[i] = manageProofs[i];         // the i-th Merkle proof
-            targets[i]     = address(overseer);       // or whatever varies per call
-            payloads[i]    = abi.encodeWithSignature(
-                                "mint(address,string)",
-                                vm.addr(pk),
-                                validatorCode
-                            );
-            decoders[i]    = address(0x010e148d8EAEad41559F1677e8abf50Fdb8b4C00);              // if you don’t need a decoder
-            values[i]      = hypeToStake;             // same stake each time, or vary
-        }
-
-        console.logString("decoders[0] ="); console.logAddress(decoders[0]);
-        console.logString("targets[0]  ="); console.logAddress(targets[0]);
+        bytes32 proof0 = stakeProofs[0][0];
+        console.logString("stakeProofs[0][0] ="); console.logBytes32(proof0);
+        console.logString("targets[0]  ="); console.logAddress(stakeTargets[0]);
+        console.logString("payloads[0] ="); console.logBytes(stakePayloads[0]);
+        console.logString("decoders[0] ="); console.logAddress(stakeDecoders[0]);
+        console.logString("values[0] ="); console.logUint(stakeValues[0]);
 
         vm.startBroadcast(pk);
 
         try manager.manageVaultWithMerkleVerification(
             stakeProofs,
-            decoders,
-            targets,
-            payloads,
-            values
+            stakeDecoders,
+            stakeTargets,
+            stakePayloads,
+            stakeValues
         ) {
-            // success
             console.logString("Staked HYPE to stHYPE successfully");
         } catch (bytes memory err) {
-            // failure
             console.logString("Stake via manager failed:");
             logError(err);
         }

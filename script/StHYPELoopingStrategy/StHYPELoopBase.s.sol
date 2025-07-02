@@ -38,6 +38,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
     bytes[] internal targetData;
     address[] internal decodersAndSanitizers;
     uint256[] internal valueAmounts;
+    address[] internal args;
     
     // Deploy using a private key from environment
     function getPrivateKey() internal view returns (uint256) {
@@ -60,11 +61,12 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         manager = ManagerWithMerkleVerification(managerAddress);
         boringVault = BoringVault(payable(boringVaultAddress));
         rolesAuthority = RolesAuthority(rolesAuthorityAddress);
-        rawDataDecoderAndSanitizer = 0x010e148d8EAEad41559F1677e8abf50Fdb8b4C00;
+        rawDataDecoderAndSanitizer = 0xa745Bb22327B13344Dc3E8786e18243940A59bb4;
         setAddress(true, sourceChain, "boringVault", boringVaultAddress);
         setAddress(true, sourceChain, "rolesAuthority", rolesAuthorityAddress);
         setAddress(true, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
         setAddress(true, "hyperliquid", "Overseer", 0x371de8EBDA2ebB627a4f6d92bD6d01eC385A309b);
+        setAddress(true, sourceChain, "wHYPE", 0x5555555555555555555555555555555555555555);
     }
     
     // Helper functions for generating merkle proofs
@@ -79,17 +81,30 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         _addFelixLeafs(leafs);
         _addHyperliquidLeafs(leafs);
 
-        // Add StHYPE mint leaf
-        uint8 sthypeMintIndex = 22;
+        uint8 WHYPE_UNWRAP_INDEX = 22;
+        leafs[WHYPE_UNWRAP_INDEX] = ManageLeaf(
+            getAddress(sourceChain, "wHYPE"),
+            false, // canSendValue doesn't matter for this
+            "withdraw(uint256)",
+            new address[](0),
+            "Unwrap wHYPE into native HYPE",
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+
+        uint256 unwrapAmount = ERC20(getAddress(sourceChain, "wHYPE")).balanceOf(address(boringVault));
+
+        uint8 sthypeMintIndex = 23;
         leafs[sthypeMintIndex] = ManageLeaf(
             getAddress(sourceChain, "Overseer"), // target
             true,                                // canSendValue
             "mint(address,string)",              // function signature
-            new address[](0),                    // argumentAddresses
+            new address[](1),                    // argumentAddresses
             "Stake HYPE into stHYPE via Overseer", // description
-            0x010e148d8EAEad41559F1677e8abf50Fdb8b4C00 // deployed decoder
+            rawDataDecoderAndSanitizer // deployed decoder
         );
         
+        leafs[sthypeMintIndex].argumentAddresses[0] = address(boringVault);
+
         console.logString("leafs generated");
         
         // Generate the merkle tree 
@@ -117,24 +132,29 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         }
 
         // Choose the specific leafs we want to use 
-        ManageLeaf[] memory manageLeafs = new ManageLeaf[](1);
-        manageLeafs[0] = leafs[sthypeMintIndex];
+        ManageLeaf[] memory manageLeafs = new ManageLeaf[](2);
+        manageLeafs[0] = leafs[WHYPE_UNWRAP_INDEX]; // unwrap first
+        manageLeafs[1] = leafs[sthypeMintIndex];
 
         manageProofs = _getProofsUsingTree(manageLeafs, merkleTree);
         console.logString("manageProofs generated");
 
-        targets = new address[](1);
+        targets = new address[](2);
         targets[0] = manageLeafs[0].target;
+        targets[1] = manageLeafs[1].target;
 
-        targetData = new bytes[](1);
-        targetData[0] = abi.encodeWithSignature("mint(address,string)", vm.addr(getPrivateKey()), "stHYPE");
+        targetData = new bytes[](2);
+        targetData[0] = abi.encodeWithSignature("withdraw(uint256)", unwrapAmount);
+        targetData[1] = abi.encodeWithSignature("mint(address,string)", address(boringVault), "stHYPE");
 
         // Use exact decoders from the leafs 
-        decodersAndSanitizers = new address[](1);
-        decodersAndSanitizers[0] = manageLeafs[0].decoderAndSanitizer;
+        decodersAndSanitizers = new address[](2);
+        decodersAndSanitizers[0] = address(rawDataDecoderAndSanitizer); // For withdraw
+        decodersAndSanitizers[1] = address(rawDataDecoderAndSanitizer); // For mint
 
-        valueAmounts = new uint256[](1);
-        valueAmounts[0] = manageLeafs[0].canSendValue ? 1 : 0;
+        valueAmounts = new uint256[](2);
+        valueAmounts[0] = 0;
+        valueAmounts[1] = unwrapAmount;
     }
 
     /**
