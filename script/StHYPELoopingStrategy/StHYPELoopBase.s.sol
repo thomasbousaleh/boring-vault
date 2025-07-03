@@ -54,18 +54,18 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
     // Load deployed contracts
     function loadDeployedContracts() internal {
         // Load addresses of deployed contracts
-        address managerAddress = 0xD6b06Ad4F092Bc40B0Df7F9ad7779E7E9E56C87b;
-        address boringVaultAddress = 0xD204A0093EE4BfD7A84Ec052777350bbd1Db92e0;
-        address rolesAuthorityAddress = 0x3d44ab06B4C35080dCb44F3EF18ffEa98192fE97;
+        address managerAddress = 0x2405e2e378cD0C932D3f112735Ba61435f724433;
+        address boringVaultAddress = 0xE2Ab074556a97EC8691cC881Ec69a60ceacfF132;
+        address rolesAuthorityAddress = 0x24C3FE2C3bB6864CF7F54Bb0bCa02eB7047aA3e6;
         
         manager = ManagerWithMerkleVerification(managerAddress);
         boringVault = BoringVault(payable(boringVaultAddress));
         rolesAuthority = RolesAuthority(rolesAuthorityAddress);
-        rawDataDecoderAndSanitizer = 0x99b94904512Afa62515F196cdE25E64d07948F26;
+        rawDataDecoderAndSanitizer = 0x8d6eD169E736F5dD583059243f29e326532fF0E2;
         setAddress(true, sourceChain, "boringVault", boringVaultAddress);
         setAddress(true, sourceChain, "rolesAuthority", rolesAuthorityAddress);
         setAddress(true, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
-        setAddress(true, "hyperliquid", "Overseer", 0x371de8EBDA2ebB627a4f6d92bD6d01eC385A309b);
+        setAddress(true, "hyperliquid", "Overseer", 0xB96f07367e69e86d6e9C3F29215885104813eeAE);
         setAddress(true, sourceChain, "wHYPE", 0x5555555555555555555555555555555555555555);
     }
     

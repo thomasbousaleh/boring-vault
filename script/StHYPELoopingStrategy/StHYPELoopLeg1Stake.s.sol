@@ -38,8 +38,6 @@ contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
     function run() external {
         console.log("Starting StHype Loop Strategy - Leg 1 (Stake)");
 
-        uint256 pk = getPrivateKey();
-
         // These were already set in setupMerkleProofs()
         bytes32[][] memory stakeProofs = manageProofs;
         address[] memory  stakeTargets = targets;
@@ -47,14 +45,32 @@ contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
         address[] memory  stakeDecoders = decodersAndSanitizers;
         uint256[] memory  stakeValues = valueAmounts;
 
-        bytes32 proof0 = stakeProofs[0][0];
-        console.logString("stakeProofs[0][0] ="); console.logBytes32(proof0);
-        console.logString("targets[0]  ="); console.logAddress(stakeTargets[0]);
-        console.logString("payloads[0] ="); console.logBytes(stakePayloads[0]);
-        console.logString("decoders[0] ="); console.logAddress(stakeDecoders[0]);
-        console.logString("values[0] ="); console.logUint(stakeValues[0]);
+        for (uint256 i = 0; i < stakeProofs.length; i++) {
+            for (uint256 j = 0; j < stakeProofs[i].length; j++) {
+                console.log("stakeProofs[%s][%s] =", i, j);
+                console.logBytes32(stakeProofs[i][j]);
+            }
+        }
 
-        vm.startBroadcast(pk);
+        for (uint256 i = 0; i < stakeTargets.length; i++) {
+            console.log("stakeTargets[%s] =", i);
+            console.logAddress(stakeTargets[i]);
+        }
+
+        for (uint256 i = 0; i < stakePayloads.length; i++) {
+            console.log("stakePayloads[%s] =", i);
+            console.logBytes(stakePayloads[i]);
+        }
+
+        for (uint256 i = 0; i < stakeDecoders.length; i++) {
+            console.log("stakeDecoders[%s] =", i);
+            console.logAddress(stakeDecoders[i]);
+        }
+
+        for (uint256 i = 0; i < stakeValues.length; i++) {
+            console.log("stakeValues[%s] =", i);
+            console.logUint(stakeValues[i]);
+        }
 
         try manager.manageVaultWithMerkleVerification(
             stakeProofs,

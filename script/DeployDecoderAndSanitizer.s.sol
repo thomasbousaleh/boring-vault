@@ -43,7 +43,7 @@ import "forge-std/console.sol";
 
 contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddresses, MerkleTreeHelper {
     uint256 public privateKey;
-    Deployer public deployer = Deployer(0x12afE7fc906f8CeBc14df974A86cc4dc1a732D26);
+    Deployer public deployer = Deployer(0x61d584Cba23676dc37B3a236AC48B061d3F4Fb2A);
 
     function setUp() external {
         privateKey = vm.envUint("BORING_DEVELOPER");
@@ -135,7 +135,7 @@ contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddres
 
         creationCode = type(StHYPELoopDecoderAndSanitizer).creationCode;
         constructorArgs = hex""; 
-        address sthypeDecoder = deployer.deployContract("StHYPELoop Decoder And Sanitizer V0.5", creationCode, constructorArgs, 0);
+        address sthypeDecoder = deployer.deployContract("StHYPELoop Decoder And Sanitizer V0.1", creationCode, constructorArgs, 0);
         console.logString("StHYPELoopDecoderAndSanitizer deployed at");
         console.logAddress(sthypeDecoder);
 
