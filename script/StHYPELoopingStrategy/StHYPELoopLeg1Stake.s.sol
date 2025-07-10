@@ -28,7 +28,7 @@ interface IOverseer {
 
 contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
 
-    function setUp() external {
+    function setUp() internal {
         // Initialize basic setup
         initChainSetup();
         loadDeployedContracts();
@@ -37,6 +37,8 @@ contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
 
     function run() external {
         console.log("Starting StHype Loop Strategy - Leg 1 (Stake)");
+
+        setUp();
 
         // These were already set in setupMerkleProofs()
         bytes32[][] memory stakeProofs = manageProofs;
@@ -71,6 +73,8 @@ contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
             console.log("stakeValues[%s] =", i);
             console.logUint(stakeValues[i]);
         }
+
+        vm.startBroadcast();
 
         try manager.manageVaultWithMerkleVerification(
             stakeProofs,
