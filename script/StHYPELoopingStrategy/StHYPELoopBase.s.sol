@@ -116,8 +116,6 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         
         leafs[sthypeMintIndex].argumentAddresses[0] = address(boringVault);
 
-        uint8 supplyCollateralIndex = 24; // or any unused index
-
         MarketParams memory params = MarketParams({
             loanToken:      0x5555555555555555555555555555555555555555,
             collateralToken:0x94e8396e0869c9f2200760af0621afd240e1cf38,
@@ -129,6 +127,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         uint256 depositAmount = ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
         console.log("Deposit amount:", depositAmount);
 
+        uint8 supplyCollateralIndex = 24; // or any unused index
         leafs[supplyCollateralIndex] = ManageLeaf({
             0x68e37dE8d93d3496ae143F2E900490f6280C57cD, // Felix Morpho contract
             true,

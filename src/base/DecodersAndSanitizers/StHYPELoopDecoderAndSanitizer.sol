@@ -42,6 +42,21 @@ contract StHYPELoopDecoderAndSanitizer is BaseDecoderAndSanitizer, ICallDataSani
         addressesFound = abi.encodePacked(to);
     }
 
+    function supplyCollateral(
+        MarketParams calldata params,
+        uint256 /* assets */,
+        address onBehalfOf,
+        bytes calldata /* data */
+    ) external pure returns (bytes memory addressesFound) {
+        addressesFound = abi.encodePacked(
+            onBehalfOf,
+            params.loanToken,
+            params.collateralToken,
+            params.oracle,
+            params.irm
+        );
+    }
+
     /* ─────────────────────────────────────── BTC-Carry helper enums ──────────────────────────────────── */
 
     enum HyperliquidOperation {
