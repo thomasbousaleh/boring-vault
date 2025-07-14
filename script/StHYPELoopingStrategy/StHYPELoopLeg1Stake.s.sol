@@ -42,10 +42,10 @@ contract StHypeLoopLeg1StakeScript is StHypeLoopBase {
 
         // These were already set in setupMerkleProofs()
         bytes32[][] memory stakeProofs = manageProofs;
-        address[] memory  stakeTargets = targets;
-        bytes[] memory    stakePayloads = targetData;
-        address[] memory  stakeDecoders = decodersAndSanitizers;
-        uint256[] memory  stakeValues = valueAmounts;
+        address[] memory   stakeTargets = targets;
+        bytes[] memory     stakePayloads = targetData;
+        address[] memory   stakeDecoders = decodersAndSanitizers;
+        uint256[] memory   stakeValues = valueAmounts;
 
         for (uint256 i = 0; i < stakeProofs.length; i++) {
             for (uint256 j = 0; j < stakeProofs[i].length; j++) {

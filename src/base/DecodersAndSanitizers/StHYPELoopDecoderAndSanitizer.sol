@@ -11,6 +11,14 @@ interface ICallDataSanitizer {
     function sanitize(bytes calldata data) external view returns (bytes memory);
 }
 
+struct MarketParams {
+    address loanToken;
+    address collateralToken;
+    address oracle;
+    address irm;
+    uint256 lltv;
+}
+
 /// @title StHYPE-Loop & BTC-Carry Combined Decoder/Sanitizer
 /// @dev Registers as a single decoder with ManagerWithMerkleVerification
 contract StHYPELoopDecoderAndSanitizer is BaseDecoderAndSanitizer, ICallDataSanitizer {

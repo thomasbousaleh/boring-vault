@@ -70,13 +70,13 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         manager = ManagerWithMerkleVerification(managerAddress);
         boringVault = BoringVault(payable(boringVaultAddress));
         rolesAuthority = RolesAuthority(rolesAuthorityAddress);
-        rawDataDecoderAndSanitizer = 0x8d6eD169E736F5dD583059243f29e326532fF0E2;
+        rawDataDecoderAndSanitizer = 0xA766B6CaCE6d11b6FB664d4FB426087C3B75C910;
         setAddress(true, sourceChain, "boringVault", boringVaultAddress);
         setAddress(true, sourceChain, "rolesAuthority", rolesAuthorityAddress);
         setAddress(true, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
         setAddress(true, "hyperliquid", "Overseer", 0xB96f07367e69e86d6e9C3F29215885104813eeAE);
         setAddress(true, sourceChain, "wHYPE", 0x5555555555555555555555555555555555555555);
-        setAddress(true, sourceChain, "wstHYPE", 0x5555555555555555555555555555555555555555);
+        setAddress(true, sourceChain, "wstHYPE", 0x94e8396e0869c9F2200760aF0621aFd240E1CF38);
     }
     
     // Helper functions for generating merkle proofs
@@ -118,9 +118,9 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
 
         MarketParams memory params = MarketParams({
             loanToken:      0x5555555555555555555555555555555555555555,
-            collateralToken:0x94e8396e0869c9f2200760af0621afd240e1cf38,
-            oracle:         0x3a459d5ec6c576d56d40dd58ae6ba337ed8d6752,
-            irm:            0xd4a426f010986dcad727e8dd6eed44ca4a9b7483,
+            collateralToken:0x94e8396e0869c9F2200760aF0621aFd240E1CF38,
+            oracle:         0x3A459D5ec6C576d56D40Dd58aE6ba337ED8D6752,
+            irm:            0xD4a426F010986dCad727e8dd6eed44cA4A9b7483,
             lltv:           770000000000000000
         });
 
@@ -128,14 +128,16 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         console.log("Deposit amount:", depositAmount);
 
         uint8 supplyCollateralIndex = 24; // or any unused index
-        leafs[supplyCollateralIndex] = ManageLeaf({
-            0x68e37dE8d93d3496ae143F2E900490f6280C57cD, // Felix Morpho contract
+        leafs[supplyCollateralIndex] = ManageLeaf(
+            0x68e37dE8d93d3496ae143F2E900490f6280C57cD,
             true,
             "supplyCollateral((address,address,address,address,uint256),uint256,address,bytes)",
             new address[](1),
             "Supply stHYPE/wstHYPE as collateral to Felix",
             rawDataDecoderAndSanitizer
-        });
+        );
+
+        console.log("Supply leaf created");
 
         leafs[supplyCollateralIndex].argumentAddresses[0] = address(boringVault);
 
