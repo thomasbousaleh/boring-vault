@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.21;
 
-import {BaseDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/BaseDecoderAndSanitizer.sol";
+import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndSanitizers/BaseDecoderAndSanitizer.sol";
 
 /// @notice Interface for call-data sanitizers used by ManagerWithMerkleVerification
 interface ICallDataSanitizer {
@@ -24,6 +24,8 @@ struct MarketParams {
 contract StHYPELoopDecoderAndSanitizer is BaseDecoderAndSanitizer, ICallDataSanitizer {
 
     /* ──────────────────────────────────────── StHYPE Loop (no-op) ─────────────────────────────────────── */
+
+    error StHYPELoopDecoderAndSanitizer__CallbackNotSupported();
 
     /// @notice Extracts address touched by mint call for whitelist check
     /// @dev For StHYPE Loop we don’t need to mutate or inspect calldata,
@@ -51,18 +53,27 @@ contract StHYPELoopDecoderAndSanitizer is BaseDecoderAndSanitizer, ICallDataSani
     }
 
     function supplyCollateral(
-        MarketParams calldata params,
-        uint256 /* assets */,
-        address onBehalfOf,
-        bytes calldata /* data */
+        DecoderCustomTypes.MarketParams calldata params,
+        uint256,
+        address onBehalf,
+        bytes calldata data
     ) external pure returns (bytes memory addressesFound) {
-        addressesFound = abi.encodePacked(
-            onBehalfOf,
-            params.loanToken,
-            params.collateralToken,
-            params.oracle,
-            params.irm
-        );
+        // Sanitize raw data
+        if (data.length > 0) revert StHYPELoopDecoderAndSanitizer__CallbackNotSupported();
+
+        // Return addresses found
+        addressesFound = abi.encodePacked(params.loanToken, params.collateralToken, params.oracle, params.irm, onBehalf);
+    }
+
+    function borrow(
+        DecoderCustomTypes.MarketParams calldata params,
+        uint256,
+        uint256,
+        address onBehalf,
+        address receiver
+    ) external pure returns (bytes memory addressesFound) {
+        addressesFound =
+            abi.encodePacked(params.loanToken, params.collateralToken, params.oracle, params.irm, onBehalf, receiver);
     }
 
     /* ─────────────────────────────────────── BTC-Carry helper enums ──────────────────────────────────── */

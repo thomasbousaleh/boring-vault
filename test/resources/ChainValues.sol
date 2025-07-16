@@ -116,7 +116,7 @@ contract ChainValues {
         values[hyperliquid]["onChainQueue"] = 0xC3EAb16f44539C6081a327543eb80e8870C1Dec4.toBytes32();
         values[hyperliquid]["teller"] = 0xe8b75fB8208cC4d3054fE9793D9748fb3D34D450.toBytes32();
         values[hyperliquid]["strategyManager"] = 0xDd00059904ddF45e30b4131345957f76F26b8f6c.toBytes32();
-        values[hyperliquid]["rawDataDecoderAndSanitizer"] = 0xA766B6CaCE6d11b6FB664d4FB426087C3B75C910.toBytes32();
+        values[hyperliquid]["rawDataDecoderAndSanitizer"] = 0xdA62790BD3A2bb957C9B00b00EC0c860418AA487.toBytes32();
 
         // Tellers
         values[hyperliquid]["hypeBTCTeller"] = 0x6Ee3aaCcf9f2321E49063C4F8da775DdBd407268.toBytes32();

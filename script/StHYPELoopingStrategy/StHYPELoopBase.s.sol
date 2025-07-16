@@ -70,7 +70,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         manager = ManagerWithMerkleVerification(managerAddress);
         boringVault = BoringVault(payable(boringVaultAddress));
         rolesAuthority = RolesAuthority(rolesAuthorityAddress);
-        rawDataDecoderAndSanitizer = 0xA766B6CaCE6d11b6FB664d4FB426087C3B75C910;
+        rawDataDecoderAndSanitizer = 0xdA62790BD3A2bb957C9B00b00EC0c860418AA487;
         setAddress(true, sourceChain, "boringVault", boringVaultAddress);
         setAddress(true, sourceChain, "rolesAuthority", rolesAuthorityAddress);
         setAddress(true, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
@@ -117,7 +117,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         leafs[sthypeMintIndex].argumentAddresses[0] = address(boringVault);
 
         MarketParams memory params = MarketParams({
-            loanToken:      0x5555555555555555555555555555555555555555,
+            loanToken:      0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb,
             collateralToken:0x94e8396e0869c9F2200760aF0621aFd240E1CF38,
             oracle:         0x3A459D5ec6C576d56D40Dd58aE6ba337ED8D6752,
             irm:            0xD4a426F010986dCad727e8dd6eed44cA4A9b7483,
@@ -130,16 +130,50 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         uint8 supplyCollateralIndex = 24; // or any unused index
         leafs[supplyCollateralIndex] = ManageLeaf(
             0x68e37dE8d93d3496ae143F2E900490f6280C57cD,
-            true,
+            false,
             "supplyCollateral((address,address,address,address,uint256),uint256,address,bytes)",
-            new address[](1),
+            new address[](5),
             "Supply stHYPE/wstHYPE as collateral to Felix",
             rawDataDecoderAndSanitizer
         );
 
         console.log("Supply leaf created");
 
-        leafs[supplyCollateralIndex].argumentAddresses[0] = address(boringVault);
+        leafs[supplyCollateralIndex].argumentAddresses[0] = 0x5555555555555555555555555555555555555555;
+        leafs[supplyCollateralIndex].argumentAddresses[1] = 0x94e8396e0869c9F2200760aF0621aFd240E1CF38;
+        leafs[supplyCollateralIndex].argumentAddresses[2] = 0xF92cCE636920d3835b135EA1D58bead4E2D62B15;
+        leafs[supplyCollateralIndex].argumentAddresses[3] = 0xD4a426F010986dCad727e8dd6eed44cA4A9b7483;
+        leafs[supplyCollateralIndex].argumentAddresses[4] = address(boringVault);
+
+        MarketParams memory borrowParams = MarketParams({
+            loanToken:      0x5555555555555555555555555555555555555555,
+            collateralToken:0x94e8396e0869c9F2200760aF0621aFd240E1CF38,
+            oracle:         0xF92cCE636920d3835b135EA1D58bead4E2D62B15,
+            irm:            0xD4a426F010986dCad727e8dd6eed44cA4A9b7483,
+            lltv:           915000000000000000
+        });
+
+        uint256 borrowAmount = 73636446765; //ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
+        console.log("Borrow amount:", borrowAmount);
+
+        uint8 borrowIndex = 25; // or any unused index
+        leafs[borrowIndex] = ManageLeaf(
+            0x68e37dE8d93d3496ae143F2E900490f6280C57cD,
+            false,
+            "borrow((address,address,address,address,uint256),uint256,uint256,address,address)",
+            new address[](6),
+            "Borrow from Felix",
+            rawDataDecoderAndSanitizer
+        );
+
+        console.log("Borrow leaf created");
+
+        leafs[borrowIndex].argumentAddresses[0] = 0x5555555555555555555555555555555555555555;
+        leafs[borrowIndex].argumentAddresses[1] = 0x94e8396e0869c9F2200760aF0621aFd240E1CF38;
+        leafs[borrowIndex].argumentAddresses[2] = 0xF92cCE636920d3835b135EA1D58bead4E2D62B15;
+        leafs[borrowIndex].argumentAddresses[3] = 0xD4a426F010986dCad727e8dd6eed44cA4A9b7483;
+        leafs[borrowIndex].argumentAddresses[4] = address(boringVault);
+        leafs[borrowIndex].argumentAddresses[5] = address(boringVault);
 
         console.logString("leafs generated");
         
@@ -168,20 +202,22 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         }
 
         // Choose the specific leafs we want to use 
-        ManageLeaf[] memory manageLeafs = new ManageLeaf[](3);
+        ManageLeaf[] memory manageLeafs = new ManageLeaf[](4);
         manageLeafs[0] = leafs[WHYPE_UNWRAP_INDEX]; // unwrap first
         manageLeafs[1] = leafs[sthypeMintIndex];
         manageLeafs[2] = leafs[supplyCollateralIndex];
+        manageLeafs[3] = leafs[borrowIndex];
 
         manageProofs = _getProofsUsingTree(manageLeafs, merkleTree);
         console.logString("manageProofs generated");
 
-        targets = new address[](3);
+        targets = new address[](4);
         targets[0] = manageLeafs[0].target;
         targets[1] = manageLeafs[1].target;
         targets[2] = manageLeafs[2].target;
+        targets[3] = manageLeafs[3].target;
 
-        targetData = new bytes[](3);
+        targetData = new bytes[](4);
         targetData[0] = abi.encodeWithSignature("withdraw(uint256)", unwrapAmount);
         targetData[1] = abi.encodeWithSignature("mint(address)", address(boringVault));
         targetData[2] = abi.encodeWithSignature(
@@ -191,17 +227,27 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
             address(boringVault),
             bytes("")       // empty data
         );
+        targetData[3] = abi.encodeWithSignature(
+            "borrow((address,address,address,address,uint256),uint256,uint256,address,address)",
+            borrowParams,
+            borrowAmount,         // assets
+            0,                    // minOut or slippage buffer (if needed)
+            address(boringVault), // onBehalf
+            address(boringVault)  // receiver
+        );
 
         // Use exact decoders from the leafs 
-        decodersAndSanitizers = new address[](3);
+        decodersAndSanitizers = new address[](4);
         decodersAndSanitizers[0] = address(rawDataDecoderAndSanitizer); // For withdraw
         decodersAndSanitizers[1] = address(rawDataDecoderAndSanitizer); // For mint
         decodersAndSanitizers[2] = address(rawDataDecoderAndSanitizer);
+        decodersAndSanitizers[3] = address(rawDataDecoderAndSanitizer);
 
-        valueAmounts = new uint256[](3);
+        valueAmounts = new uint256[](4);
         valueAmounts[0] = 0;
         valueAmounts[1] = unwrapAmount;
-        valueAmounts[2] = depositAmount;
+        valueAmounts[2] = 0;
+        valueAmounts[3] = 0;
     }
 
     /**
