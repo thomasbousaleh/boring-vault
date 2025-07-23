@@ -121,13 +121,12 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
             getAddress(sourceChain, "wstHYPE"), // target
             false,
             "approve(address,uint256)",         // function signature
-            new address[](2),                   // argumentAddresses
+            new address[](1),                   // argumentAddresses
             "Approve FelixMarket to spend wstHYPE from Vault",
             rawDataDecoderAndSanitizer
         );
 
         leafs[approveIndex].argumentAddresses[0] = 0x68e37dE8d93d3496ae143F2E900490f6280C57cD; // FelixMarket
-        leafs[approveIndex].argumentAddresses[1] = address(boringVault); // vault doesn't change, just for indexing
 
         console.log("wstHYPE:", ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault)));
 
@@ -139,7 +138,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
             lltv:           0.915e18
         });
 
-        uint256 depositAmount = ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault)) * 9/10;
+        uint256 depositAmount = ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault))/10;
         console.log("Deposit amount:", depositAmount);
 
         uint8 supplyCollateralIndex = 25; // or any unused index
@@ -168,7 +167,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
             lltv:           0.915e18
         });
 
-        uint256 borrowAmount = 1e7; //ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
+        uint256 borrowAmount = 1; //ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
         console.log("Borrow amount:", borrowAmount);
 
         uint8 borrowIndex = 26; // or any unused index

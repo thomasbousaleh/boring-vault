@@ -40,10 +40,10 @@ contract StHypeLoopLeg2BorrowScript is StHypeLoopBase {
         selected        = new uint256[](2);
         
         selected[0] = 0; // setManageRoot
-        selected[1] = 3; // supplyCollateral
+        selected[1] = 4; // borrow
 
         // We're only executing the 3rd operation: supplyCollateral
-        for (uint256 i = 0; i < 2; i++) {
+        for (uint256 i = 0; i < selected.length; i++) {
             uint256 idx = selected[i];
             depositProofs[i] = manageProofs[idx];
             depositTargets[i] = targets[idx];
