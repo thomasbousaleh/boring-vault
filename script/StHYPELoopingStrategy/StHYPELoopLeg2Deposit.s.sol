@@ -4,6 +4,7 @@ pragma solidity 0.8.21;
 /* solhint-disable no-console */
 import {StHypeLoopBase} from "./StHYPELoopBase.s.sol";
 import {console} from "forge-std/console.sol";
+import {ERC20} from "@solmate/tokens/ERC20.sol";
 
 /**
  * @title StHypeLoopLeg2DepositToFelix
@@ -37,10 +38,11 @@ contract StHypeLoopLeg2DepositScript is StHypeLoopBase {
         depositPayloads = new bytes[](2);
         depositDecoders = new address[](2);
         depositValues   = new uint256[](2);
-        selected        = new uint256[](2);
+        selected        = new uint256[](3);
         
         selected[0] = 0; // setManageRoot
-        selected[1] = 2; // supplyCollateral
+        selected[1] = 2; // approve
+        selected[2] = 3; // supplyCollateral
 
         // We're only executing the 3rd operation: supplyCollateral
         for (uint256 i = 0; i < 2; i++) {
@@ -78,6 +80,10 @@ contract StHypeLoopLeg2DepositScript is StHypeLoopBase {
             console.log("depositValues[%s] =", i);
             console.logUint(depositValues[i]);
         }
+
+        vm.startBroadcast();
+        ERC20(getAddress(sourceChain, "wstHYPE")).approve(rawDataDecoderAndSanitizer, type(uint256).max);
+        vm.stopBroadcast();
 
         console.log("Depositing to Felix...");
         vm.startBroadcast();

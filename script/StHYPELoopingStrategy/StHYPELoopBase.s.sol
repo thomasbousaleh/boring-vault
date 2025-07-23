@@ -116,18 +116,33 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         
         leafs[sthypeMintIndex].argumentAddresses[0] = address(boringVault);
 
-        MarketParams memory params = MarketParams({
-            loanToken:      0xB8CE59FC3717ada4C02eaDF9682A9e934F625ebb,
+        uint8 approveIndex = 24;
+        leafs[approveIndex] = ManageLeaf(
+            getAddress(sourceChain, "wstHYPE"), // target
+            false,
+            "approve(address,uint256)",         // function signature
+            new address[](2),                   // argumentAddresses
+            "Approve FelixMarket to spend wstHYPE from Vault",
+            rawDataDecoderAndSanitizer
+        );
+
+        leafs[approveIndex].argumentAddresses[0] = 0x68e37dE8d93d3496ae143F2E900490f6280C57cD; // FelixMarket
+        leafs[approveIndex].argumentAddresses[1] = address(boringVault); // vault doesn't change, just for indexing
+
+        console.log("wstHYPE:", ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault)));
+
+        MarketParams memory depositParams = MarketParams({
+            loanToken:      0x5555555555555555555555555555555555555555,
             collateralToken:0x94e8396e0869c9F2200760aF0621aFd240E1CF38,
-            oracle:         0x3A459D5ec6C576d56D40Dd58aE6ba337ED8D6752,
+            oracle:         0xF92cCE636920d3835b135EA1D58bead4E2D62B15,
             irm:            0xD4a426F010986dCad727e8dd6eed44cA4A9b7483,
-            lltv:           770000000000000000
+            lltv:           0.915e18
         });
 
-        uint256 depositAmount = ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
+        uint256 depositAmount = ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault)) * 9/10;
         console.log("Deposit amount:", depositAmount);
 
-        uint8 supplyCollateralIndex = 24; // or any unused index
+        uint8 supplyCollateralIndex = 25; // or any unused index
         leafs[supplyCollateralIndex] = ManageLeaf(
             0x68e37dE8d93d3496ae143F2E900490f6280C57cD,
             false,
@@ -150,13 +165,13 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
             collateralToken:0x94e8396e0869c9F2200760aF0621aFd240E1CF38,
             oracle:         0xF92cCE636920d3835b135EA1D58bead4E2D62B15,
             irm:            0xD4a426F010986dCad727e8dd6eed44cA4A9b7483,
-            lltv:           915000000000000000
+            lltv:           0.915e18
         });
 
-        uint256 borrowAmount = 73636446765; //ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
+        uint256 borrowAmount = 1e7; //ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
         console.log("Borrow amount:", borrowAmount);
 
-        uint8 borrowIndex = 25; // or any unused index
+        uint8 borrowIndex = 26; // or any unused index
         leafs[borrowIndex] = ManageLeaf(
             0x68e37dE8d93d3496ae143F2E900490f6280C57cD,
             false,
@@ -202,32 +217,39 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         }
 
         // Choose the specific leafs we want to use 
-        ManageLeaf[] memory manageLeafs = new ManageLeaf[](4);
+        ManageLeaf[] memory manageLeafs = new ManageLeaf[](5);
         manageLeafs[0] = leafs[WHYPE_UNWRAP_INDEX]; // unwrap first
         manageLeafs[1] = leafs[sthypeMintIndex];
-        manageLeafs[2] = leafs[supplyCollateralIndex];
-        manageLeafs[3] = leafs[borrowIndex];
+        manageLeafs[2] = leafs[approveIndex];
+        manageLeafs[3] = leafs[supplyCollateralIndex];
+        manageLeafs[4] = leafs[borrowIndex];
 
         manageProofs = _getProofsUsingTree(manageLeafs, merkleTree);
         console.logString("manageProofs generated");
 
-        targets = new address[](4);
+        targets = new address[](5);
         targets[0] = manageLeafs[0].target;
         targets[1] = manageLeafs[1].target;
         targets[2] = manageLeafs[2].target;
         targets[3] = manageLeafs[3].target;
+        targets[4] = manageLeafs[4].target;
 
-        targetData = new bytes[](4);
+        targetData = new bytes[](5);
         targetData[0] = abi.encodeWithSignature("withdraw(uint256)", unwrapAmount);
         targetData[1] = abi.encodeWithSignature("mint(address)", address(boringVault));
-        targetData[2] = abi.encodeWithSignature(
+        targetData[2] = abi.encodeWithSignature( // 👈 approve
+            "approve(address,uint256)",
+            0x68e37dE8d93d3496ae143F2E900490f6280C57cD,
+            type(uint256).max
+        );
+        targetData[3] = abi.encodeWithSignature(
             "supplyCollateral((address,address,address,address,uint256),uint256,address,bytes)",
-            params,   // pass actual struct instance
+            depositParams,   // pass actual struct instance
             depositAmount,         // uint256 assets
             address(boringVault),
             bytes("")       // empty data
         );
-        targetData[3] = abi.encodeWithSignature(
+        targetData[4] = abi.encodeWithSignature(
             "borrow((address,address,address,address,uint256),uint256,uint256,address,address)",
             borrowParams,
             borrowAmount,         // assets
@@ -237,17 +259,19 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         );
 
         // Use exact decoders from the leafs 
-        decodersAndSanitizers = new address[](4);
+        decodersAndSanitizers = new address[](5);
         decodersAndSanitizers[0] = address(rawDataDecoderAndSanitizer); // For withdraw
         decodersAndSanitizers[1] = address(rawDataDecoderAndSanitizer); // For mint
         decodersAndSanitizers[2] = address(rawDataDecoderAndSanitizer);
         decodersAndSanitizers[3] = address(rawDataDecoderAndSanitizer);
+        decodersAndSanitizers[4] = address(rawDataDecoderAndSanitizer);
 
-        valueAmounts = new uint256[](4);
+        valueAmounts = new uint256[](5);
         valueAmounts[0] = 0;
         valueAmounts[1] = unwrapAmount;
         valueAmounts[2] = 0;
         valueAmounts[3] = 0;
+        valueAmounts[4] = 0;
     }
 
     /**

@@ -79,6 +79,10 @@ contract StHypeLoopLeg2BorrowScript is StHypeLoopBase {
             console.logUint(depositValues[i]);
         }
 
+        // vm.startBroadcast();
+        // ERC20(getAddress(sourceChain, "wstHYPE")).approve(rawDataDecoderAndSanitizer, type(uint256).max);
+        // vm.stopBroadcast();
+
         console.log("Depositing to Felix...");
         vm.startBroadcast();
 
