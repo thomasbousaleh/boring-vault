@@ -133,9 +133,9 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         MarketParams memory depositParams = MarketParams({
             loanToken:      0x5555555555555555555555555555555555555555,
             collateralToken:0x94e8396e0869c9F2200760aF0621aFd240E1CF38,
-            oracle:         0xF92cCE636920d3835b135EA1D58bead4E2D62B15,
+            oracle:         0xD767818Ef397e597810cF2Af6b440B1b66f0efD3,
             irm:            0xD4a426F010986dCad727e8dd6eed44cA4A9b7483,
-            lltv:           0.915e18
+            lltv:           860000000000000000
         });
 
         uint256 depositAmount = ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault))/10;
@@ -155,19 +155,19 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
 
         leafs[supplyCollateralIndex].argumentAddresses[0] = 0x5555555555555555555555555555555555555555;
         leafs[supplyCollateralIndex].argumentAddresses[1] = 0x94e8396e0869c9F2200760aF0621aFd240E1CF38;
-        leafs[supplyCollateralIndex].argumentAddresses[2] = 0xF92cCE636920d3835b135EA1D58bead4E2D62B15;
+        leafs[supplyCollateralIndex].argumentAddresses[2] = 0xD767818Ef397e597810cF2Af6b440B1b66f0efD3;
         leafs[supplyCollateralIndex].argumentAddresses[3] = 0xD4a426F010986dCad727e8dd6eed44cA4A9b7483;
         leafs[supplyCollateralIndex].argumentAddresses[4] = address(boringVault);
 
         MarketParams memory borrowParams = MarketParams({
             loanToken:      0x5555555555555555555555555555555555555555,
             collateralToken:0x94e8396e0869c9F2200760aF0621aFd240E1CF38,
-            oracle:         0xF92cCE636920d3835b135EA1D58bead4E2D62B15,
+            oracle:         0xD767818Ef397e597810cF2Af6b440B1b66f0efD3,
             irm:            0xD4a426F010986dCad727e8dd6eed44cA4A9b7483,
-            lltv:           0.915e18
+            lltv:           860000000000000000
         });
 
-        uint256 borrowAmount = 1; //ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
+        uint256 borrowAmount = 1000000; //ERC20(getAddress(sourceChain, "wstHYPE")).balanceOf(address(boringVault));
         console.log("Borrow amount:", borrowAmount);
 
         uint8 borrowIndex = 26; // or any unused index
@@ -184,7 +184,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
 
         leafs[borrowIndex].argumentAddresses[0] = 0x5555555555555555555555555555555555555555;
         leafs[borrowIndex].argumentAddresses[1] = 0x94e8396e0869c9F2200760aF0621aFd240E1CF38;
-        leafs[borrowIndex].argumentAddresses[2] = 0xF92cCE636920d3835b135EA1D58bead4E2D62B15;
+        leafs[borrowIndex].argumentAddresses[2] = 0xD767818Ef397e597810cF2Af6b440B1b66f0efD3;
         leafs[borrowIndex].argumentAddresses[3] = 0xD4a426F010986dCad727e8dd6eed44cA4A9b7483;
         leafs[borrowIndex].argumentAddresses[4] = address(boringVault);
         leafs[borrowIndex].argumentAddresses[5] = address(boringVault);
