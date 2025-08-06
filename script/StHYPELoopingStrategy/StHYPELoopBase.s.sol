@@ -11,6 +11,7 @@ import {SafeTransferLib} from "@solmate/utils/SafeTransferLib.sol";
 import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
 import {BoringVault} from "src/base/BoringVault.sol";
 import {RolesAuthority} from "@solmate/auth/authorities/RolesAuthority.sol";
+import {IMorpho} from "./interfaces/IMorpho.sol";
 
 // Interfaces for strategy execution
 interface IHyperliquidVault {
@@ -28,6 +29,7 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
     BoringVault public boringVault;
     address public rawDataDecoderAndSanitizer;
     RolesAuthority public rolesAuthority;
+    IMorpho public morpho;
 
     // Helper struct
     struct MarketParams {
@@ -66,14 +68,17 @@ contract StHypeLoopBase is Script, MerkleTreeHelper {
         address managerAddress = 0x2405e2e378cD0C932D3f112735Ba61435f724433;
         address boringVaultAddress = 0xE2Ab074556a97EC8691cC881Ec69a60ceacfF132;
         address rolesAuthorityAddress = 0x24C3FE2C3bB6864CF7F54Bb0bCa02eB7047aA3e6;
-        
+        address morphoAddress = 0x68e37dE8d93d3496ae143F2E900490f6280C57cD;
+
         manager = ManagerWithMerkleVerification(managerAddress);
         boringVault = BoringVault(payable(boringVaultAddress));
         rolesAuthority = RolesAuthority(rolesAuthorityAddress);
         rawDataDecoderAndSanitizer = 0xdA62790BD3A2bb957C9B00b00EC0c860418AA487;
+        morpho = IMorpho(morphoAddress);
         setAddress(true, sourceChain, "boringVault", boringVaultAddress);
         setAddress(true, sourceChain, "rolesAuthority", rolesAuthorityAddress);
         setAddress(true, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
+        setAddress(true, sourceChain, "morpho", morphoAddress);
         setAddress(true, "hyperliquid", "Overseer", 0xB96f07367e69e86d6e9C3F29215885104813eeAE);
         setAddress(true, sourceChain, "wHYPE", 0x5555555555555555555555555555555555555555);
         setAddress(true, sourceChain, "wstHYPE", 0x94e8396e0869c9F2200760aF0621aFd240E1CF38);
