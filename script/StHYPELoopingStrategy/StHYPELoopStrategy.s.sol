@@ -76,27 +76,25 @@ contract StHYPELoopStrategyScript is StHypeLoopBase {
 
         console.log("Borrowed Assets:", borrowedAssets);
 
-        // Calculate max borrow allowed
-        // uint256 collateralValue = uint256(collateral) * oraclePrice / ORACLE_PRICE_SCALE;
-        // uint256 maxBorrow = collateralValue * marketParams.lltv / WAD;
+        // Replace with actual oracle price if you want; using 1e18 for now
+        uint256 ORACLE_PRICE_SCALE = 1e18;
+        uint256 WAD = 1e18;
+        uint256 oraclePrice = 1e18;
 
-        // Calculate health factor
-        // uint256 healthFactor = borrowedAssets * WAD / (maxBorrow == 0 ? 1 : maxBorrow);
+        uint256 collateralValue = uint256(collateral) * oraclePrice / ORACLE_PRICE_SCALE;
+        uint256 maxBorrow = collateralValue * depositParams.lltv / WAD;
+        uint256 healthFactor = borrowedAssets * WAD / (maxBorrow == 0 ? 1 : maxBorrow);
 
-        // console.log("Collateral:", collateral);
-        // console.log("Oracle Price:", oraclePrice);
-        // console.log("Max Borrow:", maxBorrow);
-        // console.log("Borrowed Assets:", borrowedAssets);
-        // console.log("Health Factor (WAD):", healthFactor);
+        console.log("Collateral Value (USD):", collateralValue);
+        console.log("Max Borrow Allowed (USD):", maxBorrow);
+        console.log("Health Factor (WAD):", healthFactor);
 
-        /* 
         if (healthFactor < BORROW_HEALTH_THRESHOLD_WAD) {
             console.log("Health good, borrowing more.");
-            StHYPELoopLeg2BorrowScript borrowScript = new StHYPELoopLeg2BorrowScript();
-            borrowScript.run();
+            //StHypeLoopLeg2BorrowScript borrowScript = new StHypeLoopLeg2BorrowScript();
+            //borrowScript.run();
         } else {
             console.log("Skipping borrow, health factor too high.");
         }
-        */
     }
 }
